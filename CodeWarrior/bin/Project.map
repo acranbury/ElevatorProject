@@ -1,5 +1,5 @@
 *** EVALUATION ***
-PROGRAM "C:\Users\acranbury-cc\Google Drive\CodeWarrior\ElevatorProject\Project\bin\Project.abs"
+PROGRAM "G:\GitHub\ElevatorProject\CodeWarrior\bin\Project.abs"
 
 *********************************************************************************************
 TARGET SECTION
@@ -15,6 +15,11 @@ FILE SECTION
 mc9s12c32.c.o                           Model: SMALL,         Lang: ANSI-C
 main.c.o                                Model: SMALL,         Lang: ANSI-C
 Start12.c.o                             Model: SMALL,         Lang: ANSI-C
+PRINTF.C.o (ansisi.lib)                 Model: SMALL,         Lang: ANSI-C
+rtshc12.c.o (ansisi.lib)                Model: SMALL,         Lang: ANSI-C
+lcd.c.o                                 Model: SMALL,         Lang: ANSI-C
+timer.c.o                               Model: SMALL,         Lang: ANSI-C
+usonic.c.o                              Model: SMALL,         Lang: ANSI-C
 
 *********************************************************************************************
 STARTUP SECTION
@@ -26,7 +31,9 @@ SECTION-ALLOCATION SECTION
 Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
 .init                              6     R     0xC000     0xC005   ROM_C000
-.text                             11     R     0xC006     0xC010   ROM_C000
+.rodata                          116     R     0xC006     0xC079   ROM_C000
+.rodata1                          35     R     0xC07A     0xC09C   ROM_C000
+.text                           1842     R     0xC09D     0xC7CE   ROM_C000
 .stack                           256   R/W      0x800      0x8FF   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
 .abs_section_9                     1   N/I        0x9        0x9   .absSeg1
@@ -249,11 +256,16 @@ Section Name                    Size  Type     From       To       Segment
 .abs_section_fc                    2   N/I       0xFC       0xFD   .absSeg218
 .abs_section_16e                   2   N/I      0x16E      0x16F   .absSeg219
 .abs_section_17e                   2   N/I      0x17E      0x17F   .absSeg220
-.vectSeg221_vect                   2     R     0xFFFE     0xFFFF   .vectSeg221
+.abs_section_ffde                  2     R     0xFFDE     0xFFDF   .absSeg221
+.abs_section_ffe6                  2     R     0xFFE6     0xFFE7   .absSeg222
+.bss                               8   R/W      0x900      0x907   RAM
+RUNTIME                          115     R     0xC7CF     0xC841   ROM_C000
+.common                            4   R/W      0x908      0x90B   RAM
+.vectSeg223_vect                   2     R     0xFFFE     0xFFFF   .vectSeg223
 
 Summary of section sizes per section type:
-READ_ONLY (R):          13 (dec:       19)
-READ_WRITE (R/W):      100 (dec:      256)
+READ_ONLY (R):         848 (dec:     2120)
+READ_WRITE (R/W):      10C (dec:      268)
 NO_INIT (N/I):         104 (dec:      260)
 
 *********************************************************************************************
@@ -304,19 +316,19 @@ MODULE:                 -- mc9s12c32.c.o --
      _RTICTL                                     3B       1       1       0   .abs_section_3b
      _COPCTL                                     3C       1       1       0   .abs_section_3c
      _ARMCOP                                     3F       1       1       0   .abs_section_3f
-     _TIOS                                       40       1       1       0   .abs_section_40
-     _CFORC                                      41       1       1       0   .abs_section_41
+     _TIOS                                       40       1       1       3   .abs_section_40
+     _CFORC                                      41       1       1       2   .abs_section_41
      _OC7M                                       42       1       1       0   .abs_section_42
      _OC7D                                       43       1       1       0   .abs_section_43
-     _TSCR1                                      46       1       1       0   .abs_section_46
+     _TSCR1                                      46       1       1       5   .abs_section_46
      _TTOV                                       47       1       1       0   .abs_section_47
-     _TCTL1                                      48       1       1       0   .abs_section_48
+     _TCTL1                                      48       1       1       4   .abs_section_48
      _TCTL2                                      49       1       1       0   .abs_section_49
-     _TCTL3                                      4A       1       1       0   .abs_section_4a
+     _TCTL3                                      4A       1       1       4   .abs_section_4a
      _TCTL4                                      4B       1       1       0   .abs_section_4b
-     _TIE                                        4C       1       1       0   .abs_section_4c
-     _TSCR2                                      4D       1       1       0   .abs_section_4d
-     _TFLG1                                      4E       1       1       0   .abs_section_4e
+     _TIE                                        4C       1       1       2   .abs_section_4c
+     _TSCR2                                      4D       1       1       2   .abs_section_4d
+     _TFLG1                                      4E       1       1       2   .abs_section_4e
      _TFLG2                                      4F       1       1       0   .abs_section_4f
      _PACTL                                      60       1       1       0   .abs_section_60
      _PAFLG                                      61       1       1       0   .abs_section_61
@@ -451,20 +463,20 @@ MODULE:                 -- mc9s12c32.c.o --
      _RDRAD                                     273       1       1       0   .abs_section_273
      _PERAD                                     274       1       1       0   .abs_section_274
      _PPSAD                                     275       1       1       0   .abs_section_275
-     _PORTAB                                      0       2       2       0   .abs_section_0
-     _DDRAB                                       2       2       2       0   .abs_section_2
+     _PORTAB                                      0       2       2      35   .abs_section_0
+     _DDRAB                                       2       2       2       5   .abs_section_2
      _PARTID                                     1A       2       2       0   .abs_section_1a
      _DBGTB                                      22       2       2       0   .abs_section_22
      _DBGCC                                      26       2       2       0   .abs_section_26
      _DBGCA                                      2B       2       2       0   .abs_section_2b
      _DBGCB                                      2E       2       2       0   .abs_section_2e
-     _TCNT                                       44       2       2       0   .abs_section_44
+     _TCNT                                       44       2       2       3   .abs_section_44
      _TC0                                        50       2       2       0   .abs_section_50
      _TC1                                        52       2       2       0   .abs_section_52
      _TC2                                        54       2       2       0   .abs_section_54
-     _TC3                                        56       2       2       0   .abs_section_56
-     _TC4                                        58       2       2       0   .abs_section_58
-     _TC5                                        5A       2       2       0   .abs_section_5a
+     _TC3                                        56       2       2       3   .abs_section_56
+     _TC4                                        58       2       2       2   .abs_section_58
+     _TC5                                        5A       2       2       1   .abs_section_5a
      _TC6                                        5C       2       2       0   .abs_section_5c
      _TC7                                        5E       2       2       0   .abs_section_5e
      _PACNT                                      62       2       2       0   .abs_section_62
@@ -492,31 +504,97 @@ MODULE:                 -- mc9s12c32.c.o --
      _CANTXTSR                                  17E       2       2       0   .abs_section_17e
 MODULE:                 -- main.c.o --
 - PROCEDURES:
-     main                                      C006       B      11       1   .text       
+     main                                      C09D      2E      46       1   .text       
 - VARIABLES:
+     STRING.Hello.World.1                      C07A       C      12       1   .rodata1    
+     STRING.Hello.World....d.mm.2              C086      14      20       1   .rodata1    
 MODULE:                 -- Start12.c.o --
 - PROCEDURES:
      _Startup                                  C000       6       6       0   .init       
 - VARIABLES:
 - LABELS:
      __SEG_END_SSTACK                           900       0       0       1               
+MODULE:                 -- PRINTF.C.o (ansisi.lib) --
+- PROCEDURES:
+     vprintf                                   C0CB     478    1144      49   .text       
+     _out                                      C543       C      12       9   .text       
+     deposit_char                              C54F       F      15       1   .text       
+     vsprintf                                  C55E      29      41       1   .text       
+- VARIABLES:
+     pow10                                     C006      28      40       4   .rodata     
+     pow16                                     C02E      20      32       4   .rodata     
+     pow8                                      C04E      2C      44       4   .rodata     
+     pbuf                                       900       6       6      15   .bss        
+MODULE:                 -- rtshc12.c.o (ansisi.lib) --
+- PROCEDURES:
+     _LCMP_P                                   C7CF      15      21       3   RUNTIME     
+     _LNEG                                     C7E4       D      13       1   RUNTIME     
+     _ILSEXT                                   C7F1       7       7       2   RUNTIME     
+     _CASE_DIRECT_BYTE                         C7F8       5       5       1   RUNTIME     
+     _CASE_CHECKED_BYTE                        C7FD      14      20       1   RUNTIME     
+     _CASE_SEARCH_8                            C811      17      23       1   RUNTIME     
+     _CASE_SEARCH_8_BYTE                       C828      1A      26       1   RUNTIME     
+- VARIABLES:
+MODULE:                 -- lcd.c.o --
+- PROCEDURES:
+     LCDinit                                   C587      55      85       1   .text       
+     LCDclear                                  C5DC       B      11       3   .text       
+     LCDhome                                   C5E7       B      11       1   .text       
+     LCDputc                                   C5F2      46      70       2   .text       
+     LCDputs                                   C638       F      15       2   .text       
+     LCDprintf                                 C647      1C      28       2   .text       
+     LCDaddress                                C663      30      48       2   .text       
+     LCDcmd                                    C693      39      57       8   .text       
+     LCDdata                                   C6CC      39      57       1   .text       
+- VARIABLES:
+     STRING....1                               C09A       3       3       1   .rodata1    
+MODULE:                 -- timer.c.o --
+- PROCEDURES:
+     timer_init                                C705      11      17       1   .text       
+     msleep                                    C716      32      50       8   .text       
+     TCNT_Overflow_ISR                         C748       A      10       1   .text       
+- VARIABLES:
+     timer_overflow_count                       906       2       2       3   .bss        
+     _Vector_16                                FFDE       2       2       0   .abs_section_ffde
+MODULE:                 -- usonic.c.o --
+- PROCEDURES:
+     usonic_init                               C752       7       7       1   .text       
+     usonic_getDistance                        C759      55      85       1   .text       
+     sonic_ISR                                 C7AE      21      33       1   .text       
+- VARIABLES:
+     _Vector_12                                FFE6       2       2       0   .abs_section_ffe6
+     first_count                                908       2       2       5   .common     
+     second_count                               90A       2       2       4   .common     
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   mc9s12c32.c.o                              260      0      0
-  main.c.o                                     0     11      0
+  main.c.o                                     0     46     32
   Start12.c.o                                  0      6      0
+  PRINTF.C.o (ansisi.lib)                      6   1212    116
+  rtshc12.c.o (ansisi.lib)                     0    115      0
+  lcd.c.o                                      0    382      3
+  timer.c.o                                    2     77      2
+  usonic.c.o                                   4    125      2
   other                                      256      2      0
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  main 
+  main vprintf _out deposit_char vsprintf LCDinit LCDclear LCDhome LCDputc 
+  LCDputs LCDprintf LCDaddress LCDcmd LCDdata timer_init msleep 
+  TCNT_Overflow_ISR usonic_init usonic_getDistance sonic_ISR 
+SECTION: ".bss"
+  pbuf timer_overflow_count 
 SECTION: ".init"
   _Startup 
+SECTION: ".rodata"
+  pow10 pow16 pow8 
+SECTION: ".rodata1"
+  STRING.Hello.World.1 STRING.Hello.World....d.mm.2 STRING....1 
 SECTION: ".abs_section_8"
   _PORTE 
 SECTION: ".abs_section_9"
@@ -959,13 +1037,22 @@ SECTION: ".abs_section_16e"
   _CANRXTSR 
 SECTION: ".abs_section_17e"
   _CANTXTSR 
+SECTION: "RUNTIME"
+  _LCMP_P _LNEG _ILSEXT _CASE_DIRECT_BYTE _CASE_CHECKED_BYTE _CASE_SEARCH_8 
+  _CASE_SEARCH_8_BYTE 
+SECTION: ".common"
+  first_count second_count 
+SECTION: ".abs_section_ffde"
+  _Vector_16 
+SECTION: ".abs_section_ffe6"
+  _Vector_12 
 
 *********************************************************************************************
 OBJECT LIST SORTED BY ADDRESS
      Name                                      Addr   hSize   dSize     Ref    Section   RLIB
 ---------------------------------------------------------------------------------------------
-     _PORTAB                                      0       2       2       0   .abs_section_0
-     _DDRAB                                       2       2       2       0   .abs_section_2
+     _PORTAB                                      0       2       2      35   .abs_section_0
+     _DDRAB                                       2       2       2       5   .abs_section_2
      _PORTE                                       8       1       1       0   .abs_section_8
      _DDRE                                        9       1       1       0   .abs_section_9
      _PEAR                                        A       1       1       0   .abs_section_a
@@ -1006,27 +1093,27 @@ OBJECT LIST SORTED BY ADDRESS
      _RTICTL                                     3B       1       1       0   .abs_section_3b
      _COPCTL                                     3C       1       1       0   .abs_section_3c
      _ARMCOP                                     3F       1       1       0   .abs_section_3f
-     _TIOS                                       40       1       1       0   .abs_section_40
-     _CFORC                                      41       1       1       0   .abs_section_41
+     _TIOS                                       40       1       1       3   .abs_section_40
+     _CFORC                                      41       1       1       2   .abs_section_41
      _OC7M                                       42       1       1       0   .abs_section_42
      _OC7D                                       43       1       1       0   .abs_section_43
-     _TCNT                                       44       2       2       0   .abs_section_44
-     _TSCR1                                      46       1       1       0   .abs_section_46
+     _TCNT                                       44       2       2       3   .abs_section_44
+     _TSCR1                                      46       1       1       5   .abs_section_46
      _TTOV                                       47       1       1       0   .abs_section_47
-     _TCTL1                                      48       1       1       0   .abs_section_48
+     _TCTL1                                      48       1       1       4   .abs_section_48
      _TCTL2                                      49       1       1       0   .abs_section_49
-     _TCTL3                                      4A       1       1       0   .abs_section_4a
+     _TCTL3                                      4A       1       1       4   .abs_section_4a
      _TCTL4                                      4B       1       1       0   .abs_section_4b
-     _TIE                                        4C       1       1       0   .abs_section_4c
-     _TSCR2                                      4D       1       1       0   .abs_section_4d
-     _TFLG1                                      4E       1       1       0   .abs_section_4e
+     _TIE                                        4C       1       1       2   .abs_section_4c
+     _TSCR2                                      4D       1       1       2   .abs_section_4d
+     _TFLG1                                      4E       1       1       2   .abs_section_4e
      _TFLG2                                      4F       1       1       0   .abs_section_4f
      _TC0                                        50       2       2       0   .abs_section_50
      _TC1                                        52       2       2       0   .abs_section_52
      _TC2                                        54       2       2       0   .abs_section_54
-     _TC3                                        56       2       2       0   .abs_section_56
-     _TC4                                        58       2       2       0   .abs_section_58
-     _TC5                                        5A       2       2       0   .abs_section_5a
+     _TC3                                        56       2       2       3   .abs_section_56
+     _TC4                                        58       2       2       2   .abs_section_58
+     _TC5                                        5A       2       2       1   .abs_section_5a
      _TC6                                        5C       2       2       0   .abs_section_5c
      _TC7                                        5E       2       2       0   .abs_section_5e
      _PACTL                                      60       1       1       0   .abs_section_60
@@ -1185,12 +1272,65 @@ OBJECT LIST SORTED BY ADDRESS
      _RDRAD                                     273       1       1       0   .abs_section_273
      _PERAD                                     274       1       1       0   .abs_section_274
      _PPSAD                                     275       1       1       0   .abs_section_275
+     pbuf                                       900       6       6      15   .bss        
+     timer_overflow_count                       906       2       2       3   .bss        
+     first_count                                908       2       2       5   .common     
+     second_count                               90A       2       2       4   .common     
      _Startup                                  C000       6       6       0   .init       
-     main                                      C006       B      11       1   .text       
+     pow10                                     C006      28      40       4   .rodata     
+     pow16                                     C02E      20      32       4   .rodata     
+     pow8                                      C04E      2C      44       4   .rodata     
+     STRING.Hello.World.1                      C07A       C      12       1   .rodata1    
+     STRING.Hello.World....d.mm.2              C086      14      20       1   .rodata1    
+     STRING....1                               C09A       3       3       1   .rodata1    
+     main                                      C09D      2E      46       1   .text       
+     vprintf                                   C0CB     478    1144      49   .text       
+     _out                                      C543       C      12       9   .text       
+     deposit_char                              C54F       F      15       1   .text       
+     vsprintf                                  C55E      29      41       1   .text       
+     LCDinit                                   C587      55      85       1   .text       
+     LCDclear                                  C5DC       B      11       3   .text       
+     LCDhome                                   C5E7       B      11       1   .text       
+     LCDputc                                   C5F2      46      70       2   .text       
+     LCDputs                                   C638       F      15       2   .text       
+     LCDprintf                                 C647      1C      28       2   .text       
+     LCDaddress                                C663      30      48       2   .text       
+     LCDcmd                                    C693      39      57       8   .text       
+     LCDdata                                   C6CC      39      57       1   .text       
+     timer_init                                C705      11      17       1   .text       
+     msleep                                    C716      32      50       8   .text       
+     TCNT_Overflow_ISR                         C748       A      10       1   .text       
+     usonic_init                               C752       7       7       1   .text       
+     usonic_getDistance                        C759      55      85       1   .text       
+     sonic_ISR                                 C7AE      21      33       1   .text       
+     _LCMP_P                                   C7CF      15      21       3   RUNTIME     
+     _LNEG                                     C7E4       D      13       1   RUNTIME     
+     _ILSEXT                                   C7F1       7       7       2   RUNTIME     
+     _CASE_DIRECT_BYTE                         C7F8       5       5       1   RUNTIME     
+     _CASE_CHECKED_BYTE                        C7FD      14      20       1   RUNTIME     
+     _CASE_SEARCH_8                            C811      17      23       1   RUNTIME     
+     _CASE_SEARCH_8_BYTE                       C828      1A      26       1   RUNTIME     
+     _Vector_16                                FFDE       2       2       0   .abs_section_ffde
+     _Vector_12                                FFE6       2       2       0   .abs_section_ffe6
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
 ---------------------------------------------------------------------------------------------
+NOT USED PROCEDURES
+PRINTF.C.o (ansisi.lib):
+  set_printf sprintf 
+rtshc12.c.o (ansisi.lib):
+  _BSHL _BSHRS _BSHRU _BDIVMODU _BDIVMODS _ISHL _ISHRU _ISHRS _LSHL _LSHRU 
+  _LSHRS _LADD _LSUB _LAND _LOR _LXOR _LCMP _LCMP_PP _LCOM _LINC _LDEC _LMUL 
+  _LMULU16x32 _LMULS16x32 _lDivMod _LDIVU _NEG_P _LDIVS _LMODU _LMODS _COPY 
+  _CASE_DIRECT _CASE_CHECKED _CASE_SEARCH _CASE_SEARCH_BYTE _FCALL _FPCMP 
+lcd.c.o:
+  LCDbksp LCDgetc LCDbusy LCDcgen 
+timer.c.o:
+  get_overflow_count reset_overflow_count 
+NOT USED VARIABLES
+rtshc12.c.o (ansisi.lib):
+  _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
 
 *********************************************************************************************
 COPYDOWN SECTION
@@ -1200,6 +1340,34 @@ COPYDOWN SECTION
 OBJECT-DEPENDENCIES SECTION
 ---------------------------------------------------------------------------------------------
 _Startup                  USES __SEG_END_SSTACK main 
+main                      USES timer_init LCDinit STRING.Hello.World.1 
+                                LCDprintf usonic_init LCDclear usonic_getDistance 
+                                STRING.Hello.World....d.mm.2 msleep 
+vprintf                   USES vprintf _out _CASE_SEARCH_8_BYTE 
+                                _CASE_DIRECT_BYTE _CASE_SEARCH_8 pbuf _ILSEXT _LNEG pow8 _LCMP_P 
+                                pow16 pow10 
+_out                      USES pbuf 
+deposit_char              USES pbuf 
+vsprintf                  USES pbuf deposit_char vprintf 
+LCDinit                   USES _DDRAB msleep _PORTAB LCDcmd LCDclear 
+LCDclear                  USES LCDcmd msleep 
+LCDhome                   USES LCDcmd msleep 
+LCDputc                   USES _CASE_CHECKED_BYTE LCDclear LCDaddress LCDcmd 
+                                LCDputc STRING....1 LCDputs LCDhome LCDdata 
+LCDputs                   USES LCDputc 
+LCDprintf                 USES vsprintf LCDputs 
+LCDaddress                USES _DDRAB _PORTAB 
+LCDcmd                    USES _PORTAB msleep 
+LCDdata                   USES _PORTAB msleep 
+timer_init                USES timer_overflow_count _TSCR2 _TSCR1 
+msleep                    USES _TSCR1 _TCNT _TC3 _TIOS _TFLG1 
+TCNT_Overflow_ISR         USES _TCNT timer_overflow_count 
+usonic_init               USES _TIOS 
+usonic_getDistance        USES first_count second_count _TIE _TCTL3 _TSCR1 
+                                _TCTL1 _CFORC _TCNT _TC5 _TFLG1 
+sonic_ISR                 USES first_count _TC4 _TCTL3 second_count _TIE 
+_Vector_16                USES TCNT_Overflow_ISR 
+_Vector_12                USES sonic_ISR 
 
 *********************************************************************************************
 DEPENDENCY TREE
@@ -1207,17 +1375,95 @@ DEPENDENCY TREE
  main and _Startup Group
  | 
  +- main                
- |    
+ |  | 
+ |  +- timer_init          
+ |  |    
+ |  +- LCDinit             
+ |  |  | 
+ |  |  +- msleep              
+ |  |  |    
+ |  |  +- LCDcmd              
+ |  |  |  | 
+ |  |  |  +- msleep               (see above)
+ |  |  |     
+ |  |  +- LCDclear            
+ |  |     | 
+ |  |     +- LCDcmd               (see above)
+ |  |     |  
+ |  |     +- msleep               (see above)
+ |  |        
+ |  +- LCDprintf           
+ |  |  | 
+ |  |  +- vsprintf            
+ |  |  |  | 
+ |  |  |  +- deposit_char        
+ |  |  |  |    
+ |  |  |  +- vprintf             
+ |  |  |     | 
+ |  |  |     +- _out                
+ |  |  |     |    
+ |  |  |     +- _CASE_SEARCH_8_BYTE 
+ |  |  |     |    
+ |  |  |     +- _CASE_DIRECT_BYTE   
+ |  |  |     |    
+ |  |  |     +- _CASE_SEARCH_8      
+ |  |  |     |    
+ |  |  |     +- _ILSEXT             
+ |  |  |     |    
+ |  |  |     +- _LNEG               
+ |  |  |     |    
+ |  |  |     +- _LCMP_P             
+ |  |  |          
+ |  |  +- LCDputs              (recursive dependency)
+ |  |     | 
+ |  |     +- LCDputc              (recursive dependency)
+ |  |        | 
+ |  |        +- _CASE_CHECKED_BYTE  
+ |  |        |    
+ |  |        +- LCDclear             (see above)
+ |  |        |  
+ |  |        +- LCDaddress          
+ |  |        |    
+ |  |        +- LCDcmd               (see above)
+ |  |        |  
+ |  |        +- LCDputs              (see above) (recursive dependency)
+ |  |        |  
+ |  |        +- LCDhome             
+ |  |        |  | 
+ |  |        |  +- LCDcmd               (see above)
+ |  |        |  |  
+ |  |        |  +- msleep               (see above)
+ |  |        |     
+ |  |        +- LCDdata             
+ |  |           | 
+ |  |           +- msleep               (see above)
+ |  |              
+ |  +- usonic_init         
+ |  |    
+ |  +- LCDclear             (see above)
+ |  |  
+ |  +- usonic_getDistance  
+ |  |    
+ |  +- msleep               (see above)
+ |     
  +- _Startup            
     | 
     +- main                 (see above)
        
+ _Vector_16          
+ | 
+ +- TCNT_Overflow_ISR   
+      
+ _Vector_12          
+ | 
+ +- sonic_ISR           
+      
 *********************************************************************************************
 STATISTIC SECTION
 ---------------------------------------------------------------------------------------------
 
 ExeFile:
 --------
-Number of blocks to be downloaded: 3
-Total size of all blocks to be downloaded: 19
+Number of blocks to be downloaded: 7
+Total size of all blocks to be downloaded: 2120
 

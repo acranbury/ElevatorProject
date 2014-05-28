@@ -1,18 +1,31 @@
 #include <hidef.h>      /* common defines and macros */
 #include "derivative.h"      /* derivative-specific definitions */
+#include "timer.h"
+#include "lcd.h"
+#include "usonic.h"
+#include "utils.h"
 
 
 
 void main(void) {
-  /* put your own code here */
   
+  word distance;
+  
+  timer_init();
+  LCDinit();
+  
+  LCDprintf("Hello World");
+  
+  usonic_init();
 
 
 	EnableInterrupts;
 
 
   for(;;) {
-    _FEED_COP(); /* feeds the dog */
-  } /* loop forever */
-  /* please make sure that you never leave main */
+      LCDclear();
+      distance = usonic_getDistance();
+      LCDprintf("Hello World!\n %d mm", distance);
+      msleep(100);
+  } 
 }
