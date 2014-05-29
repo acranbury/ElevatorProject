@@ -1,3 +1,4 @@
+#include <string.h>
 #include "canModule.h"
 
 unsigned char canRXData[8];
@@ -6,7 +7,7 @@ char canRXFlag;
 void initCan (){
 	CANCTL0 = 0x01;                 /* Enter Initialization Mode */
 	while (! (CANCTL1&0x01)) {};    /* Wait for Initialization Mode
-											               acknowledge (INITRQ bit = 1) */
+									   acknowledge (INITRQ bit = 1) */
 											
 	CANCTL1 = 0xA0; 
 	CANBTR0 = 0xC7;
@@ -71,8 +72,9 @@ interrupt VectorNumber_Vcanrx void can_ISR(void)
 	unsigned char length, index;
 	
 	length = (CANRXDLR & 0x0F);
+	//strncpy(canRXData, (char*)CANRXDSR0, length);
 	for (index = 0; index < length; index++)
-		canRXData[index] = *(unsigned char *)(CANRXDSR0 + index); // Get received data
+		canRXData[index] = *(&CANRXDSR0 + index); // Get received data
 	
 	CANRFLG = 0x01;		// Clear RXF
 	canRXFlag = 1;

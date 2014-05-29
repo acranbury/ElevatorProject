@@ -38,7 +38,13 @@ void main(void) {
 		message.payload = txbuff;
 		
 		sendCanFrame(message);
-		LCDprintf("Hello World!\n %d mm", distance);
+		if ( canRXFlag )
+		{
+			LCDprintf("%s!\n %d mm", canRXData, distance);
+			canRXFlag = 0;
+		}
+		else
+			LCDprintf("Hello World!\n %d mm", distance);
 		msleep(100);
   } 
 }
