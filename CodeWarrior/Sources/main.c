@@ -4,28 +4,38 @@
 #include "lcd.h"
 #include "usonic.h"
 #include "utils.h"
+#include "canModule.h"
 
 
 
 void main(void) {
   
-  word distance;
-  
-  timer_init();
-  LCDinit();
-  
-  LCDprintf("Hello World");
-  
-  usonic_init();
+	unsigned char txbuff[] = "DEADBEEF";
+	word distance;
 
+	timer_init();
+	LCDinit();
 
+	initCan();
+
+	while (!(CANCTL0 & 0x10));
+
+	CANRFLG = 0xC3;
+
+	CANRIER = 0x01;
+
+	LCDprintf("Hello World");
+
+	usonic_init();
+	
 	EnableInterrupts;
 
-
-  for(;;) {
-      LCDclear();
-      distance = usonic_getDistance();
-      LCDprintf("Hello World!\n %d mm", distance);
-      msleep(100);
+	for(;;) {
+		LCDclear();
+		distance = usonic_getDistance();
+		MSG message = {(ST_ID_100), 0x00, sizeof(txbuff) - 1, txbuff};
+		sendCanFrame(message);
+		LCDprintf("Hello World!\n %d mm", distance);
+		msleep(100);
   } 
 }

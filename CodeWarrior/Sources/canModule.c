@@ -11,13 +11,15 @@ void initCan (){
 
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
-	//CANIDAR0 = ACC_CODE_ID100_HIGH; 	//|\ 16-bit Filter 0
+	
+	CANIDAR0 = ACC_CODE_ID100_HIGH; 	  //|\ 16-bit Filter 0
 	CANIDMR0 = MASK_CODE_ST_ID_HIGH; 	  //| \__ Accepts Standard Data Frame Msg
-	//CANIDAR1 = ACC_CODE_ID100_LOW; 	  //| / with ID 0x100
+	CANIDAR1 = ACC_CODE_ID100_LOW; 	    //| / with ID 0x100
 	CANIDMR1 = MASK_CODE_ST_ID_LOW; 	  //|/
 	
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
+	
 	CANIDAR2 = 0x00; 					          //|\ 16-bit Filter 1
 	CANIDMR2 = MASK_CODE_ST_ID_HIGH; 	  //| \__ Accepts Standard Data Frame Msg
 	CANIDAR3 = 0x00; 					          //| / with ID 0x100
@@ -59,4 +61,16 @@ void sendCanFrame (MSG msg){
 	
 	/* Wait for Transmission completion */
 	while ( (CANTFLG & txbuffer) != txbuffer); 
+}
+
+interrupt VectorNumber_Vcanrx void can_ISR(void)
+{
+	unsigned char length, index;
+	
+	length = (CANRXDLR & 0x0F);
+	for (index = 0; index < length; index++)
+		canRXData[index] = *(unsigned char *)(CANRXDSR0 + index); // Get received data
+	
+	CANRFLG = 0x01;		// Clear RXF
+	canRXFlag = 1;
 }

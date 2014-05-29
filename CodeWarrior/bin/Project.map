@@ -17,6 +17,7 @@ main.c.o                                Model: SMALL,         Lang: ANSI-C
 Start12.c.o                             Model: SMALL,         Lang: ANSI-C
 PRINTF.C.o (ansisi.lib)                 Model: SMALL,         Lang: ANSI-C
 rtshc12.c.o (ansisi.lib)                Model: SMALL,         Lang: ANSI-C
+canModule.c.o                           Model: SMALL,         Lang: ANSI-C
 lcd.c.o                                 Model: SMALL,         Lang: ANSI-C
 timer.c.o                               Model: SMALL,         Lang: ANSI-C
 usonic.c.o                              Model: SMALL,         Lang: ANSI-C
@@ -33,7 +34,7 @@ Section Name                    Size  Type     From       To       Segment
 .init                              6     R     0xC000     0xC005   ROM_C000
 .rodata                          116     R     0xC006     0xC079   ROM_C000
 .rodata1                          35     R     0xC07A     0xC09C   ROM_C000
-.text                           1842     R     0xC09D     0xC7CE   ROM_C000
+.text                           1889     R     0xC09D     0xC7FD   ROM_C000
 .stack                           256   R/W      0x800      0x8FF   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
 .abs_section_9                     1   N/I        0x9        0x9   .absSeg1
@@ -256,15 +257,16 @@ Section Name                    Size  Type     From       To       Segment
 .abs_section_fc                    2   N/I       0xFC       0xFD   .absSeg218
 .abs_section_16e                   2   N/I      0x16E      0x16F   .absSeg219
 .abs_section_17e                   2   N/I      0x17E      0x17F   .absSeg220
-.abs_section_ffde                  2     R     0xFFDE     0xFFDF   .absSeg221
-.abs_section_ffe6                  2     R     0xFFE6     0xFFE7   .absSeg222
+.abs_section_ffb2                  2     R     0xFFB2     0xFFB3   .absSeg221
+.abs_section_ffde                  2     R     0xFFDE     0xFFDF   .absSeg222
+.abs_section_ffe6                  2     R     0xFFE6     0xFFE7   .absSeg223
 .bss                               8   R/W      0x900      0x907   RAM
-RUNTIME                          115     R     0xC7CF     0xC841   ROM_C000
+RUNTIME                          115     R     0xC7FE     0xC870   ROM_C000
 .common                            4   R/W      0x908      0x90B   RAM
-.vectSeg223_vect                   2     R     0xFFFE     0xFFFF   .vectSeg223
+.vectSeg224_vect                   2     R     0xFFFE     0xFFFF   .vectSeg224
 
 Summary of section sizes per section type:
-READ_ONLY (R):         848 (dec:     2120)
+READ_ONLY (R):         879 (dec:     2169)
 READ_WRITE (R/W):      10C (dec:      268)
 NO_INIT (N/I):         104 (dec:      260)
 
@@ -367,7 +369,7 @@ MODULE:                 -- mc9s12c32.c.o --
      _CANCTL1                                   141       1       1       0   .abs_section_141
      _CANBTR0                                   142       1       1       0   .abs_section_142
      _CANBTR1                                   143       1       1       0   .abs_section_143
-     _CANRFLG                                   144       1       1       0   .abs_section_144
+     _CANRFLG                                   144       1       1       1   .abs_section_144
      _CANRIER                                   145       1       1       0   .abs_section_145
      _CANTFLG                                   146       1       1       0   .abs_section_146
      _CANTIER                                   147       1       1       0   .abs_section_147
@@ -397,7 +399,7 @@ MODULE:                 -- mc9s12c32.c.o --
      _CANRXIDR1                                 161       1       1       0   .abs_section_161
      _CANRXIDR2                                 162       1       1       0   .abs_section_162
      _CANRXIDR3                                 163       1       1       0   .abs_section_163
-     _CANRXDSR0                                 164       1       1       0   .abs_section_164
+     _CANRXDSR0                                 164       1       1       1   .abs_section_164
      _CANRXDSR1                                 165       1       1       0   .abs_section_165
      _CANRXDSR2                                 166       1       1       0   .abs_section_166
      _CANRXDSR3                                 167       1       1       0   .abs_section_167
@@ -405,7 +407,7 @@ MODULE:                 -- mc9s12c32.c.o --
      _CANRXDSR5                                 169       1       1       0   .abs_section_169
      _CANRXDSR6                                 16A       1       1       0   .abs_section_16a
      _CANRXDSR7                                 16B       1       1       0   .abs_section_16b
-     _CANRXDLR                                  16C       1       1       0   .abs_section_16c
+     _CANRXDLR                                  16C       1       1       1   .abs_section_16c
      _CANTXIDR0                                 170       1       1       0   .abs_section_170
      _CANTXIDR1                                 171       1       1       0   .abs_section_171
      _CANTXIDR2                                 172       1       1       0   .abs_section_172
@@ -527,40 +529,45 @@ MODULE:                 -- PRINTF.C.o (ansisi.lib) --
      pbuf                                       900       6       6      15   .bss        
 MODULE:                 -- rtshc12.c.o (ansisi.lib) --
 - PROCEDURES:
-     _LCMP_P                                   C7CF      15      21       3   RUNTIME     
-     _LNEG                                     C7E4       D      13       1   RUNTIME     
-     _ILSEXT                                   C7F1       7       7       2   RUNTIME     
-     _CASE_DIRECT_BYTE                         C7F8       5       5       1   RUNTIME     
-     _CASE_CHECKED_BYTE                        C7FD      14      20       1   RUNTIME     
-     _CASE_SEARCH_8                            C811      17      23       1   RUNTIME     
-     _CASE_SEARCH_8_BYTE                       C828      1A      26       1   RUNTIME     
+     _LCMP_P                                   C7FE      15      21       3   RUNTIME     
+     _LNEG                                     C813       D      13       1   RUNTIME     
+     _ILSEXT                                   C820       7       7       2   RUNTIME     
+     _CASE_DIRECT_BYTE                         C827       5       5       1   RUNTIME     
+     _CASE_CHECKED_BYTE                        C82C      14      20       1   RUNTIME     
+     _CASE_SEARCH_8                            C840      17      23       1   RUNTIME     
+     _CASE_SEARCH_8_BYTE                       C857      1A      26       1   RUNTIME     
 - VARIABLES:
+MODULE:                 -- canModule.c.o --
+- PROCEDURES:
+     can_ISR                                   C587      2F      47       1   .text       
+- VARIABLES:
+     _Vector_38                                FFB2       2       2       0   .abs_section_ffb2
 MODULE:                 -- lcd.c.o --
 - PROCEDURES:
-     LCDinit                                   C587      55      85       1   .text       
-     LCDclear                                  C5DC       B      11       3   .text       
-     LCDhome                                   C5E7       B      11       1   .text       
-     LCDputc                                   C5F2      46      70       2   .text       
-     LCDputs                                   C638       F      15       2   .text       
-     LCDprintf                                 C647      1C      28       2   .text       
-     LCDaddress                                C663      30      48       2   .text       
-     LCDcmd                                    C693      39      57       8   .text       
-     LCDdata                                   C6CC      39      57       1   .text       
+     LCDinit                                   C5B6      55      85       1   .text       
+     LCDclear                                  C60B       B      11       3   .text       
+     LCDhome                                   C616       B      11       1   .text       
+     LCDputc                                   C621      46      70       2   .text       
+     LCDputs                                   C667       F      15       2   .text       
+     LCDprintf                                 C676      1C      28       2   .text       
+     LCDaddress                                C692      30      48       2   .text       
+     LCDcmd                                    C6C2      39      57       8   .text       
+     LCDdata                                   C6FB      39      57       1   .text       
 - VARIABLES:
      STRING....1                               C09A       3       3       1   .rodata1    
 MODULE:                 -- timer.c.o --
 - PROCEDURES:
-     timer_init                                C705      11      17       1   .text       
-     msleep                                    C716      32      50       8   .text       
-     TCNT_Overflow_ISR                         C748       A      10       1   .text       
+     timer_init                                C734      11      17       1   .text       
+     msleep                                    C745      32      50       8   .text       
+     TCNT_Overflow_ISR                         C777       A      10       1   .text       
 - VARIABLES:
      timer_overflow_count                       906       2       2       3   .bss        
      _Vector_16                                FFDE       2       2       0   .abs_section_ffde
 MODULE:                 -- usonic.c.o --
 - PROCEDURES:
-     usonic_init                               C752       7       7       1   .text       
-     usonic_getDistance                        C759      55      85       1   .text       
-     sonic_ISR                                 C7AE      21      33       1   .text       
+     usonic_init                               C781       7       7       1   .text       
+     usonic_getDistance                        C788      55      85       1   .text       
+     sonic_ISR                                 C7DD      21      33       1   .text       
 - VARIABLES:
      _Vector_12                                FFE6       2       2       0   .abs_section_ffe6
      first_count                                908       2       2       5   .common     
@@ -575,6 +582,7 @@ MODULE STATISTIC
   Start12.c.o                                  0      6      0
   PRINTF.C.o (ansisi.lib)                      6   1212    116
   rtshc12.c.o (ansisi.lib)                     0    115      0
+  canModule.c.o                                0     47      2
   lcd.c.o                                      0    382      3
   timer.c.o                                    2     77      2
   usonic.c.o                                   4    125      2
@@ -584,8 +592,8 @@ MODULE STATISTIC
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  main vprintf _out deposit_char vsprintf LCDinit LCDclear LCDhome LCDputc 
-  LCDputs LCDprintf LCDaddress LCDcmd LCDdata timer_init msleep 
+  main vprintf _out deposit_char vsprintf can_ISR LCDinit LCDclear LCDhome 
+  LCDputc LCDputs LCDprintf LCDaddress LCDcmd LCDdata timer_init msleep 
   TCNT_Overflow_ISR usonic_init usonic_getDistance sonic_ISR 
 SECTION: ".bss"
   pbuf timer_overflow_count 
@@ -1042,6 +1050,8 @@ SECTION: "RUNTIME"
   _CASE_SEARCH_8_BYTE 
 SECTION: ".common"
   first_count second_count 
+SECTION: ".abs_section_ffb2"
+  _Vector_38 
 SECTION: ".abs_section_ffde"
   _Vector_16 
 SECTION: ".abs_section_ffe6"
@@ -1174,7 +1184,7 @@ OBJECT LIST SORTED BY ADDRESS
      _CANCTL1                                   141       1       1       0   .abs_section_141
      _CANBTR0                                   142       1       1       0   .abs_section_142
      _CANBTR1                                   143       1       1       0   .abs_section_143
-     _CANRFLG                                   144       1       1       0   .abs_section_144
+     _CANRFLG                                   144       1       1       1   .abs_section_144
      _CANRIER                                   145       1       1       0   .abs_section_145
      _CANTFLG                                   146       1       1       0   .abs_section_146
      _CANTIER                                   147       1       1       0   .abs_section_147
@@ -1204,7 +1214,7 @@ OBJECT LIST SORTED BY ADDRESS
      _CANRXIDR1                                 161       1       1       0   .abs_section_161
      _CANRXIDR2                                 162       1       1       0   .abs_section_162
      _CANRXIDR3                                 163       1       1       0   .abs_section_163
-     _CANRXDSR0                                 164       1       1       0   .abs_section_164
+     _CANRXDSR0                                 164       1       1       1   .abs_section_164
      _CANRXDSR1                                 165       1       1       0   .abs_section_165
      _CANRXDSR2                                 166       1       1       0   .abs_section_166
      _CANRXDSR3                                 167       1       1       0   .abs_section_167
@@ -1212,7 +1222,7 @@ OBJECT LIST SORTED BY ADDRESS
      _CANRXDSR5                                 169       1       1       0   .abs_section_169
      _CANRXDSR6                                 16A       1       1       0   .abs_section_16a
      _CANRXDSR7                                 16B       1       1       0   .abs_section_16b
-     _CANRXDLR                                  16C       1       1       0   .abs_section_16c
+     _CANRXDLR                                  16C       1       1       1   .abs_section_16c
      _CANRXTSR                                  16E       2       2       0   .abs_section_16e
      _CANTXIDR0                                 170       1       1       0   .abs_section_170
      _CANTXIDR1                                 171       1       1       0   .abs_section_171
@@ -1288,28 +1298,30 @@ OBJECT LIST SORTED BY ADDRESS
      _out                                      C543       C      12       9   .text       
      deposit_char                              C54F       F      15       1   .text       
      vsprintf                                  C55E      29      41       1   .text       
-     LCDinit                                   C587      55      85       1   .text       
-     LCDclear                                  C5DC       B      11       3   .text       
-     LCDhome                                   C5E7       B      11       1   .text       
-     LCDputc                                   C5F2      46      70       2   .text       
-     LCDputs                                   C638       F      15       2   .text       
-     LCDprintf                                 C647      1C      28       2   .text       
-     LCDaddress                                C663      30      48       2   .text       
-     LCDcmd                                    C693      39      57       8   .text       
-     LCDdata                                   C6CC      39      57       1   .text       
-     timer_init                                C705      11      17       1   .text       
-     msleep                                    C716      32      50       8   .text       
-     TCNT_Overflow_ISR                         C748       A      10       1   .text       
-     usonic_init                               C752       7       7       1   .text       
-     usonic_getDistance                        C759      55      85       1   .text       
-     sonic_ISR                                 C7AE      21      33       1   .text       
-     _LCMP_P                                   C7CF      15      21       3   RUNTIME     
-     _LNEG                                     C7E4       D      13       1   RUNTIME     
-     _ILSEXT                                   C7F1       7       7       2   RUNTIME     
-     _CASE_DIRECT_BYTE                         C7F8       5       5       1   RUNTIME     
-     _CASE_CHECKED_BYTE                        C7FD      14      20       1   RUNTIME     
-     _CASE_SEARCH_8                            C811      17      23       1   RUNTIME     
-     _CASE_SEARCH_8_BYTE                       C828      1A      26       1   RUNTIME     
+     can_ISR                                   C587      2F      47       1   .text       
+     LCDinit                                   C5B6      55      85       1   .text       
+     LCDclear                                  C60B       B      11       3   .text       
+     LCDhome                                   C616       B      11       1   .text       
+     LCDputc                                   C621      46      70       2   .text       
+     LCDputs                                   C667       F      15       2   .text       
+     LCDprintf                                 C676      1C      28       2   .text       
+     LCDaddress                                C692      30      48       2   .text       
+     LCDcmd                                    C6C2      39      57       8   .text       
+     LCDdata                                   C6FB      39      57       1   .text       
+     timer_init                                C734      11      17       1   .text       
+     msleep                                    C745      32      50       8   .text       
+     TCNT_Overflow_ISR                         C777       A      10       1   .text       
+     usonic_init                               C781       7       7       1   .text       
+     usonic_getDistance                        C788      55      85       1   .text       
+     sonic_ISR                                 C7DD      21      33       1   .text       
+     _LCMP_P                                   C7FE      15      21       3   RUNTIME     
+     _LNEG                                     C813       D      13       1   RUNTIME     
+     _ILSEXT                                   C820       7       7       2   RUNTIME     
+     _CASE_DIRECT_BYTE                         C827       5       5       1   RUNTIME     
+     _CASE_CHECKED_BYTE                        C82C      14      20       1   RUNTIME     
+     _CASE_SEARCH_8                            C840      17      23       1   RUNTIME     
+     _CASE_SEARCH_8_BYTE                       C857      1A      26       1   RUNTIME     
+     _Vector_38                                FFB2       2       2       0   .abs_section_ffb2
      _Vector_16                                FFDE       2       2       0   .abs_section_ffde
      _Vector_12                                FFE6       2       2       0   .abs_section_ffe6
 
@@ -1324,6 +1336,8 @@ rtshc12.c.o (ansisi.lib):
   _LSHRS _LADD _LSUB _LAND _LOR _LXOR _LCMP _LCMP_PP _LCOM _LINC _LDEC _LMUL 
   _LMULU16x32 _LMULS16x32 _lDivMod _LDIVU _NEG_P _LDIVS _LMODU _LMODS _COPY 
   _CASE_DIRECT _CASE_CHECKED _CASE_SEARCH _CASE_SEARCH_BYTE _FCALL _FPCMP 
+canModule.c.o:
+  initCan sendCanFrame 
 lcd.c.o:
   LCDbksp LCDgetc LCDbusy LCDcgen 
 timer.c.o:
@@ -1349,6 +1363,7 @@ vprintf                   USES vprintf _out _CASE_SEARCH_8_BYTE
 _out                      USES pbuf 
 deposit_char              USES pbuf 
 vsprintf                  USES pbuf deposit_char vprintf 
+can_ISR                   USES _CANRXDLR _CANRXDSR0 _CANRFLG 
 LCDinit                   USES _DDRAB msleep _PORTAB LCDcmd LCDclear 
 LCDclear                  USES LCDcmd msleep 
 LCDhome                   USES LCDcmd msleep 
@@ -1366,6 +1381,7 @@ usonic_init               USES _TIOS
 usonic_getDistance        USES first_count second_count _TIE _TCTL3 _TSCR1 
                                 _TCTL1 _CFORC _TCNT _TC5 _TFLG1 
 sonic_ISR                 USES first_count _TC4 _TCTL3 second_count _TIE 
+_Vector_38                USES can_ISR 
 _Vector_16                USES TCNT_Overflow_ISR 
 _Vector_12                USES sonic_ISR 
 
@@ -1450,6 +1466,10 @@ DEPENDENCY TREE
     | 
     +- main                 (see above)
        
+ _Vector_38          
+ | 
+ +- can_ISR             
+      
  _Vector_16          
  | 
  +- TCNT_Overflow_ISR   
@@ -1464,6 +1484,6 @@ STATISTIC SECTION
 
 ExeFile:
 --------
-Number of blocks to be downloaded: 7
-Total size of all blocks to be downloaded: 2120
+Number of blocks to be downloaded: 8
+Total size of all blocks to be downloaded: 2169
 
