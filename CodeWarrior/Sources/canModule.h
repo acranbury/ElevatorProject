@@ -23,13 +23,13 @@ typedef struct {
 	unsigned char priority;
 	unsigned char length;
 	unsigned char *payload;
-} MSG;
+} CANMessage;
 
-unsigned char canRXData[8];
-char canRXFlag;
+extern unsigned char canRXData[8];
+extern char canRXFlag;
 
 
 void initCan (void);
-void sendCanFrame (MSG message);
+void sendCanFrame (CANMessage message);
 
 #endif

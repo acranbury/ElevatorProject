@@ -6,12 +6,11 @@
 #include "utils.h"
 #include "canModule.h"
 
-
-
 void main(void) {
   
 	unsigned char txbuff[] = "DEADBEEF";
 	word distance;
+	CANMessage message;
 
 	timer_init();
 	LCDinit();
@@ -21,7 +20,6 @@ void main(void) {
 	while (!(CANCTL0 & 0x10));
 
 	CANRFLG = 0xC3;
-
 	CANRIER = 0x01;
 
 	LCDprintf("Hello World");
@@ -33,7 +31,12 @@ void main(void) {
 	for(;;) {
 		LCDclear();
 		distance = usonic_getDistance();
-		MSG message = {(ST_ID_100), 0x00, sizeof(txbuff) - 1, txbuff};
+		
+		message.id = ST_ID_100;
+		message.priority = 0x00;
+		message.length = sizeof(txbuff) - 1;
+		message.payload = txbuff;
+		
 		sendCanFrame(message);
 		LCDprintf("Hello World!\n %d mm", distance);
 		msleep(100);
