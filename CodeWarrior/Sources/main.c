@@ -5,6 +5,7 @@
 #include "usonic.h"
 #include "utils.h"
 #include "canModule.h"
+#include "spi.h"
 
 void main(void) {
   
