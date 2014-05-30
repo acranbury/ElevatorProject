@@ -72,7 +72,6 @@ interrupt VectorNumber_Vcanrx void can_ISR(void)
 	unsigned char length, index;
 	
 	length = (CANRXDLR & 0x0F);
-	//strncpy(canRXData, (char*)CANRXDSR0, length);
 	for (index = 0; index < length; index++)
 		canRXData[index] = *(&CANRXDSR0 + index); // Get received data
 	

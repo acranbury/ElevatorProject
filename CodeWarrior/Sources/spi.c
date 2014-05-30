@@ -1,5 +1,6 @@
 #include "derivative.h"
 #include "spi.h"
+#include "utils.h"
 #define SPICR1_INIT 0b01010000
 #define SPI1MBAUD	0b00000010
 
@@ -16,14 +17,14 @@ void SPIinit(void){
 
 // put a command to the SPI module
 void SPIcmd(char cmd, char data){
-/* undefined utility macros
-  CLR_BITS(SPICR1, SPICR1_SSOE_MASK);
+// undefined utility macros
+	CLR_BITS(SPICR1, SPICR1_SSOE_MASK);
 	
 	SPIputc(LO_NYBBLE(cmd) | HI_NYBBLE(data));
 	SPIputc(LO_NYBBLE(data));
 	
 	SET_BITS(SPICR1, SPICR1_SSOE_MASK);
-*/
+
 	
 }
 
