@@ -16,28 +16,28 @@ void initCan (){
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
 	
-	CANIDAR0 = ACC_CODE_ID100_HIGH; 	//|\ 16-bit Filter 0
-	CANIDMR0 = MASK_CODE_ST_ID_HIGH; 	//| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR1 = ACC_CODE_ID100_LOW;		//| / with ID 0x100
-	CANIDMR1 = MASK_CODE_ST_ID_LOW; 	//|/
+	CANIDAR0 = 0x00;    //ACC_CODE_ID100_HIGH; 	//|\ 16-bit Filter 0
+	CANIDMR0 = 0x00; 	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR1 = 0x00;    //ACC_CODE_ID100_LOW;		//| / with ID 0x100
+	CANIDMR1 = 0x00; 	//|/
 	
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
 	
-	CANIDAR2 = 0x00; //(ACC_CODE(FLOOR_1_ID) >> 8) & 0xFF;					//|\ 16-bit Filter 1
-	CANIDMR2 = (MASK_CODE(FLOOR_1_ID) >> 8) & 0xFF;	//| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR3 = 0x00; //ACC_CODE(FLOOR_1_ID) &0xFF;					//| / with ID 0x100
-	CANIDMR3 = MASK_CODE(FLOOR_1_ID) &0xFF;		//|/
+	CANIDAR2 = (ACC_CODE(CONTROLLER_ID) >> 8) & 0xFF;	//|\ 16-bit Filter 1
+	CANIDMR2 = (MASK_CODE(CONTROLLER_ID) >> 8) & 0xFF;	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR3 = ACC_CODE(CONTROLLER_ID) &0xFF;			//| / with ID 0x100
+	CANIDMR3 = MASK_CODE(CONTROLLER_ID) & 0xFF;		    //|/
 	
 	CANIDAR4 = 0x00; 					//|\ 16-bit Filter 2
-	CANIDMR4 = MASK_CODE_ST_ID_HIGH; 	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDMR4 = 0x00; 	//| \__ Accepts Standard Data Frame CANMessage
 	CANIDAR5 = 0x00; 					//| / with ID 0x100
-	CANIDMR5 = MASK_CODE_ST_ID_LOW; 	//|/
+	CANIDMR5 = 0x00; 	//|/
 	
 	CANIDAR6 = 0x00; 					//|\ 16-bit Filter 3
-	CANIDMR6 = MASK_CODE_ST_ID_HIGH; 	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDMR6 = 0x00; 	//| \__ Accepts Standard Data Frame CANMessage
 	CANIDAR7 = 0x00; 					//| / with ID 0x100
-	CANIDMR7 = MASK_CODE_ST_ID_LOW; 	//|/
+	CANIDMR7 = 0x00; 	//|/
 	
 	CANCTL0 = 0x00;                   /* Exit Initialization Mode Request */
 	while ((CANCTL1 & 0x00) != 0) {}  /* Wait for Normal Mode */
@@ -53,11 +53,16 @@ void sendCanFrame (CANMessage message){
 	txbuffer = CANTBSEL;              /* Backup selected buffer */
 	
 	/* Load Id to IDR Register */
-	*((unsigned long *) ((unsigned long)(&CANTXIDR0))) = message.id;
+	CANTXIDR0 = (unsigned char)((message.id & 0xFF000000) >> 24);
+	CANTXIDR1 = (unsigned char)((message.id & 0xFF0000) >> 16);
+	CANTXIDR2 = (unsigned char)((message.id & 0xFF00) >> 8);
+	CANTXIDR3 = (unsigned char)(message.id & 0xFF);
+	//*((unsigned long *) ((unsigned long)(&CANTXIDR0))) = message.id;
+	
 	for (index = 0; index < message.length; index++) {
 	   /* Load data to Tx buffer Data Segment Registers */
 	  *(&CANTXDSR0 + index) = message.payload[index];
-	}
+	} 
 	
 	CANTXDLR = message.length;            /* Set Data Length Code */
 	CANTXTBPR = message.priority;         /* Set Priority */
@@ -72,6 +77,7 @@ interrupt VectorNumber_Vcanrx void can_ISR(void)
 	unsigned char length, index;
 	
 	length = (CANRXDLR & 0x0F);
+	//strncpy(canRXData, (char*)CANRXDSR0, length);
 	for (index = 0; index < length; index++)
 		canRXData[index] = *(&CANRXDSR0 + index); // Get received data
 	

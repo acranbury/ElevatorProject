@@ -18,11 +18,11 @@
 
 void main(void) {
   
-	unsigned char txbuff[] = "DEADBEEF";
+	unsigned char txbuff[8] = "";
 	word distance;
-	CANMessage message;
-	word floor = 0;
-	word lastFloor = 0;
+	CANMessage message = { 0x00, 0x00, 0x00, {0}};
+	unsigned char floor = 0;
+	unsigned char lastFloor = 0;
 
 	timer_init();
 	LCDinit();
@@ -63,12 +63,12 @@ void main(void) {
 	    floor = 4;
 		
 		if (lastFloor != floor) {    
-		  txbuff[0] = floor;
-  		message.id = ELEVATOR_CAR_ID | FLOOR_1_ID | FLOOR_2_ID | FLOOR_3_ID;
-  		message.priority = 0x00;
-  		message.length = sizeof(txbuff) - 1;
-  		message.payload = txbuff;
-		  lastFloor = floor;
+		    txbuff[0] = floor;
+      		message.id = ELEVATOR_CAR_ID | FLOOR_1_ID | FLOOR_2_ID | FLOOR_3_ID;
+      		message.priority = 0x00;
+      		message.length = sizeof(txbuff) - 1;
+      		message.payload = txbuff;
+		    lastFloor = floor;
 		} 
 		
 		/*

@@ -5,7 +5,7 @@
 
 #define NO_ERR 1
 
-#define MASK_CODE(id) (~(id))       
+#define MASK_CODE(id) ((~(id)) >> 16)       
 #define ACC_CODE(id) (((id)&0xFFFF0000) >> 16)
 
 /* Acceptance Code Definitions */
