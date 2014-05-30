@@ -8,7 +8,7 @@ typedef unsigned long   dword;
 
 
 #define LOW(value)      ((value) & 0xFF)            // Get lower byte of word
-#define HIGH(value)     (((value) >> 4) & 0xFF)     // Get upper byte of word
+#define HIGH(value)     (((value) >> 8) & 0xFF)     // Get upper byte of word
 
 
 #define SET_BITS(port,mask)     ((port) |= (mask))          // Set port bits specified in mask

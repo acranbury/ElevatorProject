@@ -24,10 +24,10 @@ void initCan (){
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
 	
-	CANIDAR2 = 0x00;					//|\ 16-bit Filter 1
-	CANIDMR2 = MASK_CODE_ST_ID_HIGH;	//| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR3 = 0x00;					//| / with ID 0x100
-	CANIDMR3 = MASK_CODE_ST_ID_LOW;		//|/
+	CANIDAR2 = 0x00; //(ACC_CODE(FLOOR_1_ID) >> 8) & 0xFF;					//|\ 16-bit Filter 1
+	CANIDMR2 = (MASK_CODE(FLOOR_1_ID) >> 8) & 0xFF;	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR3 = 0x00; //ACC_CODE(FLOOR_1_ID) &0xFF;					//| / with ID 0x100
+	CANIDMR3 = MASK_CODE(FLOOR_1_ID) &0xFF;		//|/
 	
 	CANIDAR4 = 0x00; 					//|\ 16-bit Filter 2
 	CANIDMR4 = MASK_CODE_ST_ID_HIGH; 	//| \__ Accepts Standard Data Frame CANMessage

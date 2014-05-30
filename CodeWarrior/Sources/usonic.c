@@ -63,12 +63,13 @@ interrupt VECTOR_NUM(TC_VECTOR(TC_ECHO)) void sonic_ISR(void) {
     if (first_count == 0) {
         // Detected rising edge of measurement pulse.
         first_count = TC(TC_ECHO);
+        //reset_overflow_count();
     
         // Look for the falling edge.          
         SET_IC_EDGE(TC_ECHO,IC_DETECT_FALLING); 
     } 
     else if (second_count == 0) { 
-        second_count = TC(TC_ECHO);
+        second_count = TC(TC_ECHO); // + (get_overflow_count() * (dword)65535);
         TC_INT_DISABLE(TC_ECHO); 
     }
 }
