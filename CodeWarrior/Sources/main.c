@@ -7,11 +7,22 @@
 #include "canModule.h"
 #include "spi.h"
 
+// Elevator Defines
+
+#define ELEV_THRESHOLD 5  // Threshold to have arrived at a floor, in mm.
+
+#define ELEV_1ST 50       // Distance to be at the 1st floor, in mm.
+#define ELEV_2ND 100       // Distance to be at the 1st floor, in mm.
+#define ELEV_3RD 150       // Distance to be at the 1st floor, in mm.
+#define ELEV_4TH 200       // Distance to be at the 1st floor, in mm.
+
 void main(void) {
   
 	unsigned char txbuff[] = "DEADBEEF";
 	word distance;
 	CANMessage message;
+	word floor = 0;
+	word lastFloor = 0;
 
 	timer_init();
 	LCDinit();
@@ -23,7 +34,7 @@ void main(void) {
 	CANRFLG = 0xC3;
 	CANRIER = 0x01;
 
-	LCDprintf("Hello World");
+	//LCDprintf("Hello World");
 
 	usonic_init();
 	
@@ -33,15 +44,43 @@ void main(void) {
 		LCDclear();
 		distance = usonic_getDistance();
 		
+		
+		 
+	  if (distance < (ELEV_1ST + ELEV_THRESHOLD) && distance > (ELEV_1ST - ELEV_THRESHOLD))
+	    //LCDprintf("1st Floor!\n %d mm", distance);
+	    floor = 1;
+	    
+	  else if (distance < (ELEV_2ND + ELEV_THRESHOLD) && distance > (ELEV_2ND - ELEV_THRESHOLD))
+	    //LCDprintf("2nd Floor!\n %d mm", distance);  
+	    floor = 2;
+	    
+	  else if (distance < (ELEV_3RD + ELEV_THRESHOLD) && distance > (ELEV_3RD - ELEV_THRESHOLD))
+	    //LCDprintf("3rd Floor!\n %d mm", distance); 
+	    floor = 3; 
+	    
+	  else if (distance < (ELEV_4TH + ELEV_THRESHOLD) && distance > (ELEV_4TH - ELEV_THRESHOLD))
+	    //LCDprintf("4th Floor!\n %d mm", distance);  
+	    floor = 4;
+		
+		if (lastFloor != floor) {    
+		  txbuff[0] = floor;
+  		message.id = ELEVATOR_CAR_ID | FLOOR_1_ID | FLOOR_2_ID | FLOOR_3_ID;
+  		message.priority = 0x00;
+  		message.length = sizeof(txbuff) - 1;
+  		message.payload = txbuff;
+		  lastFloor = floor;
+		} 
+		
+		/*
 		message.id = ST_ID_100;
 		message.priority = 0x00;
 		message.length = sizeof(txbuff) - 1;
-		message.payload = txbuff;
+		message.payload = txbuff; */
+		sendCanFrame(message); 
 		
-		sendCanFrame(message);
 		if ( canRXFlag )
 		{
-			LCDprintf("%s!\n %d mm", canRXData, distance);
+			LCDprintf("Floor %d!\n %d mm", canRXData[0], distance);
 			canRXFlag = 0;
 		}
 		else

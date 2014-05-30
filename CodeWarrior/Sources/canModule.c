@@ -16,28 +16,28 @@ void initCan (){
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
 	
-	CANIDAR0 = ACC_CODE_ID100_HIGH; 	  //|\ 16-bit Filter 0
-	CANIDMR0 = MASK_CODE_ST_ID_HIGH; 	  //| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR1 = ACC_CODE_ID100_LOW; 	    //| / with ID 0x100
-	CANIDMR1 = MASK_CODE_ST_ID_LOW; 	  //|/
+	CANIDAR0 = ACC_CODE_ID100_HIGH; 	//|\ 16-bit Filter 0
+	CANIDMR0 = MASK_CODE_ST_ID_HIGH; 	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR1 = ACC_CODE_ID100_LOW;		//| / with ID 0x100
+	CANIDMR1 = MASK_CODE_ST_ID_LOW; 	//|/
 	
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
 	
-	CANIDAR2 = 0x00; 					          //|\ 16-bit Filter 1
-	CANIDMR2 = MASK_CODE_ST_ID_HIGH; 	  //| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR3 = 0x00; 					          //| / with ID 0x100
-	CANIDMR3 = MASK_CODE_ST_ID_LOW; 	  //|/
+	CANIDAR2 = 0x00; //(ACC_CODE(FLOOR_1_ID) >> 8) & 0xFF;					//|\ 16-bit Filter 1
+	CANIDMR2 = (MASK_CODE(FLOOR_1_ID) >> 8) & 0xFF;	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR3 = 0x00; //ACC_CODE(FLOOR_1_ID) &0xFF;					//| / with ID 0x100
+	CANIDMR3 = MASK_CODE(FLOOR_1_ID) &0xFF;		//|/
 	
-	CANIDAR4 = 0x00; 					          //|\ 16-bit Filter 2
-	CANIDMR4 = MASK_CODE_ST_ID_HIGH; 	  //| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR5 = 0x00; 					          //| / with ID 0x100
-	CANIDMR5 = MASK_CODE_ST_ID_LOW; 	  //|/
+	CANIDAR4 = 0x00; 					//|\ 16-bit Filter 2
+	CANIDMR4 = MASK_CODE_ST_ID_HIGH; 	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR5 = 0x00; 					//| / with ID 0x100
+	CANIDMR5 = MASK_CODE_ST_ID_LOW; 	//|/
 	
-	CANIDAR6 = 0x00; 					          //|\ 16-bit Filter 3
-	CANIDMR6 = MASK_CODE_ST_ID_HIGH; 	  //| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR7 = 0x00; 					          //| / with ID 0x100
-	CANIDMR7 = MASK_CODE_ST_ID_LOW; 	  //|/
+	CANIDAR6 = 0x00; 					//|\ 16-bit Filter 3
+	CANIDMR6 = MASK_CODE_ST_ID_HIGH; 	//| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR7 = 0x00; 					//| / with ID 0x100
+	CANIDMR7 = MASK_CODE_ST_ID_LOW; 	//|/
 	
 	CANCTL0 = 0x00;                   /* Exit Initialization Mode Request */
 	while ((CANCTL1 & 0x00) != 0) {}  /* Wait for Normal Mode */
