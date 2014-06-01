@@ -26,14 +26,21 @@
 #define MASK_CODE_FLOOR_3_ID 0xFDFF
 */
 
-// ID Definition
-#define ST_ID_100 0x20000000
+//Node ID Definitions
+#define ST_ID_100 0x20000000    //test id
 
 #define CONTROLLER_ID (0x00010000 << 5)   //shifting by 5 bits to fit in 11 bit CAN address
 #define ELEVATOR_CAR_ID (0x00020000 << 5)
 #define FLOOR_1_ID (0x00040000 << 5)
 #define FLOOR_2_ID (0x00080000 << 5)
 #define FLOOR_3_ID (0x00100000 << 5)
+
+//Messsage IDs
+#define ELEV_LOCATION 0x00
+#define CALL_BTN_PRESS 0x01
+#define PANEL_BTN_PRESS 0x02
+#define APPEND_DISPLAY_CHAR 0x03
+#define ERROR_MSG 0xFF
 
 typedef struct {
 	unsigned long id;
