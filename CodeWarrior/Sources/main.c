@@ -34,10 +34,7 @@
 #define DOOR_CLOSE 0x11
 #define EMERG_STOP 0xEE
 
-
 #define UP_CALL_BTN 0x02
-#define UP_CALL_ROW 0x00
-#define DOWN_CALL_ROW 0x01
 
 void main(void) {
     char i;
@@ -45,10 +42,9 @@ void main(void) {
 	word distance;
 	CANMessage message = { 0x00, 0x00, 0x00, {0}};
 	unsigned char curFloor = 0;
+	unsigned char lastFloor = 0;
 	unsigned char elevatorDirection = 0;
 	unsigned char callButtonsPressed[2][NUM_FLOORS] = { 0 };
-	unsigned char panelButtonsPressed[4] = { 0 };
-	unsigned char panicButton = 0;
 	unsigned char elevatorTarget = 0;
 	unsigned char targetFound = 0;
 
@@ -112,9 +108,10 @@ void main(void) {
       		message.priority = 0x00;
       		message.length = sizeof(txbuff) - 1;
       		message.payload = txbuff;
-      		
-    	} else {   //elevatorTarget = curFloor, which means elevator is stationary   	    
-    	    //elevatorDirection = DIR_STOPPED; //set direction to stationary
+    	    
+    	    lastFloor = curFloor;
+    	} else {   //elevatorTarget = curFloor, which means elevator is stationary     	    
+    	    elevatorDirection = DIR_STOPPED; //set direction to stationary
     	    txbuff[0] = ELEV_LOCATION;
     	    txbuff[1] = curFloor;
             txbuff[2] = elevatorDirection;
@@ -123,8 +120,7 @@ void main(void) {
     	    message.priority = 0x00;
     	    message.length = sizeof(txbuff) - 1;
     	    message.payload = txbuff;
-    	   
-    	    panelButtonsPressed[curFloor-1] = 0; //clear the panel floor button as we have reached the destination floor
+    	    
     	    targetFound = 0; //clear the target found flag to find a new target
     	}	
 		sendCanFrame(message); 
@@ -133,37 +129,27 @@ void main(void) {
 		{
 		    if (canRXData[0] == CALL_BTN_PRESS){
 		        if(canRXData[2] == UP_CALL_BTN){
-		            callButtonsPressed[UP_CALL_ROW][canRXData[1]-1] = 1;
+		            callButtonsPressed[0][canRXData[1]-1] = 1;
 		        }else {
-		            callButtonsPressed[DOWN_CALL_ROW][canRXData[1]-1] = 1;
+		            callButtonsPressed[1][canRXData[1]-1] = 1;
 		        }
 		        
 		    } else if (canRXData[0] == PANEL_BTN_PRESS){
 		        switch (canRXData[1]){
-		            case PANEL_FLOOR_1:{
-		                panelButtonsPressed[0] = 1;
+		            case PANEL_FLOOR_1:
 		                break;
-		            }
-		            case PANEL_FLOOR_2:{
-		                panelButtonsPressed[1] = 1;
+		            case PANEL_FLOOR_2:
 		                break;
-		            }
-		            case PANEL_FLOOR_3:{
-		                panelButtonsPressed[2] = 1;
+		            case PANEL_FLOOR_3:
 		                break;
-		            }
-		            case PANEL_FLOOR_4:{
-		                panelButtonsPressed[3] = 1;
+		            case PANEL_FLOOR_4:
 		                break;
-		            }
 		            case DOOR_CLOSE:
 		                break;
 		            case DOOR_OPEN:
 		                break;
-		            case EMERG_STOP:{
-		                panicButton = 1;
+		            case EMERG_STOP:
 		                break;
-		            }
 		            default:
 		                break;
 		        
@@ -184,9 +170,8 @@ void main(void) {
 	        
     	    if (elevatorDirection == DIR_UP){    //Elevator is currently moving up, handle any up requests above elevator before moving down
     	        for(i=curFloor-1; i< NUM_FLOORS; i++){
-    	            if(callButtonsPressed[UP_CALL_ROW][i] || panelButtonsPressed[i]){
-    	                callButtonsPressed[UP_CALL_ROW][i] = 0;
-    	                panelButtonsPressed[i] = 0;
+    	            if(callButtonsPressed[0][i]){
+    	                callButtonsPressed[0][i] = 0;
     	                elevatorTarget = i+1;
     	                targetFound = 1;
     	                break;
@@ -194,9 +179,8 @@ void main(void) {
     	        }
     	        if (targetFound == 0) {             //No up requests above elevator current position, service any down requests, from the top floor first 
     	           for(i = NUM_FLOORS; i >= 0; i--){
-    	                if(callButtonsPressed[DOWN_CALL_ROW][i] || panelButtonsPressed[i]){
-    	                    callButtonsPressed[DOWN_CALL_ROW][i] = 0;
-    	                    panelButtonsPressed[i] = 0;
+    	                if(callButtonsPressed[1][i]){
+    	                    callButtonsPressed[1][i] = 0;
     	                    elevatorTarget = i+1;
     	                    targetFound = 1;
     	                    break;
@@ -204,8 +188,8 @@ void main(void) {
     	           }
     	           if(targetFound == 0){                //no down requests found, service any up requests below the elevator's current floor
     	                for(i=0; i< curFloor-1; i++){
-    	                    if(callButtonsPressed[UP_CALL_ROW][i]){
-    	                        callButtonsPressed[UP_CALL_ROW][i] = 0;
+    	                    if(callButtonsPressed[0][i]){
+    	                        callButtonsPressed[0][i] = 0;
     	                        elevatorTarget = i+1;
     	                        targetFound = 1;
     	                        break;
@@ -215,9 +199,8 @@ void main(void) {
     	        }
     	    } else if (elevatorDirection == DIR_DOWN){    //Elevator currently moving down, handle any down requests below the elevator before moving back up
     	        for (i=curFloor-1; i >= 0; i--){
-    	            if(callButtonsPressed[DOWN_CALL_ROW][i] || panelButtonsPressed[i]){
-    	                callButtonsPressed[DOWN_CALL_ROW][i] = 0;
-    	                panelButtonsPressed[i] = 0;
+    	            if(callButtonsPressed[1][i]){
+    	                callButtonsPressed[0][i] = 0;
     	                elevatorTarget = i + 1;
     	                targetFound = 1;
     	                break;
@@ -225,9 +208,8 @@ void main(void) {
     	        }
     	        if (targetFound == 0) {             //No down requests below elevator current position, service any up requests, from the bottom floor first 
     	           for(i = 0; i < NUM_FLOORS; i++){
-    	                if(callButtonsPressed[UP_CALL_ROW][i] || panelButtonsPressed[i]){
-    	                    callButtonsPressed[UP_CALL_ROW][i] = 0;
-    	                    panelButtonsPressed[i] = 0;
+    	                if(callButtonsPressed[0][i]){
+    	                    callButtonsPressed[0][i] = 0;
     	                    elevatorTarget = i+1;
     	                    targetFound = 1;
     	                    break;
@@ -235,8 +217,8 @@ void main(void) {
     	           }
     	           if(targetFound == 0){                //no up requests found, service any down requests above the elevator's current floor
     	                for(i=NUM_FLOORS; i >= curFloor-1; i--){
-    	                    if(callButtonsPressed[DOWN_CALL_ROW][i]){
-    	                        callButtonsPressed[DOWN_CALL_ROW][i] = 0;
+    	                    if(callButtonsPressed[1][i]){
+    	                        callButtonsPressed[1][i] = 0;
     	                        elevatorTarget = i+1;
     	                        targetFound = 1;
     	                        break;
@@ -246,9 +228,8 @@ void main(void) {
     	        }
     	    }
 	    }
-		if(panicButton){
-		    LCDprintf("PANIC BUTTON SELECTED- ELEVATOR STALLED!");
-		} else if(targetFound){
+			
+		if(targetFound){
 		    LCDprintf("Elevator target floor is %d!", elevatorTarget);
 		} else {
 		    LCDprintf("Elevator is stationary, no buttons pressed.");
