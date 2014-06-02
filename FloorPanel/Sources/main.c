@@ -76,9 +76,11 @@ void main(void) {
 		if(canRXFlag)
 		{
 			// grab the command from the buffer
-			DisableInterrupts;
-			strncpy(rxBuffer, canRXData, CAN_MSG_LENGTH);
-			EnableInterrupts;
+		//	DisableInterrupts;
+			for(i=0; i<8; i++){
+			    rxBuffer[i]=canRXData[i];
+			}
+		//	EnableInterrupts;
 			
 			if(rxBuffer[0] == 0x00)
 				switch(rxBuffer[1])

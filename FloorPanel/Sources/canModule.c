@@ -9,9 +9,9 @@ void initCan (){
 	while (! (CANCTL1&0x01)) {};    /* Wait for Initialization Mode
 									   acknowledge (INITRQ bit = 1) */
 											
-	CANCTL1 = 0xA0; 
-	CANBTR0 = 0xC7;
-	CANBTR1 = 0x3A;
+	CANCTL1 = 0b11000000;
+	CANBTR0 = 0b01000000;     //sjw 0b01, prescaler = 1
+	CANBTR1 = 0b00010100;     //use tseg2 = 2, tseg1 = 5
 
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters

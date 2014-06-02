@@ -9,9 +9,9 @@ void initCan (){
 	while (! (CANCTL1&0x01)) {};    /* Wait for Initialization Mode
 									   acknowledge (INITRQ bit = 1) */
 											
-	CANCTL1 = 0xA0; 
-	CANBTR0 = 0xC7;
-	CANBTR1 = 0x3A;
+	CANCTL1 = 0b11000000;
+	CANBTR0 = 0b01000000;     //sjw 0b01, prescaler = 1
+	CANBTR1 = 0b00010100;     //use tseg2 = 2, tseg1 = 5
 
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
@@ -21,8 +21,6 @@ void initCan (){
 	CANIDAR1 = 0x00;    //ACC_CODE_ID100_LOW;		//| / with ID 0x100
 	CANIDMR1 = 0x00; 	//|/
 	
-	/* Acceptance Filters */
-	CANIDAC = 0x10;                     // Set four 16-bit Filters
 	
 	CANIDAR2 = (ACC_CODE(CONTROLLER_ID) >> 8) & 0xFF;	//|\ 16-bit Filter 1
 	CANIDMR2 = (MASK_CODE(CONTROLLER_ID) >> 8) & 0xFF;	//| \__ Accepts Standard Data Frame CANMessage
