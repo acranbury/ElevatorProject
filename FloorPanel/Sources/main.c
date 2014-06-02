@@ -90,7 +90,7 @@ void main(void) {
 						switch(rxBuffer[2])
 						{
 							case CALL_BTN_UP:
-								CLR_BITS(PORTA,LEDF1UP);
+								CLR_BITS(PORTA,LEDF1UP); 
 								break;
 							case CALL_BTN_DN:
 								CLR_BITS(PORTA,LEDF1DN);
@@ -98,7 +98,7 @@ void main(void) {
 						}
 						break;
 					case FLOOR_NUM_2:
-						SPIputc(NUM1);
+						SPIputc(NUM2);
 						switch(rxBuffer[2])
 						{
 							case CALL_BTN_UP:
@@ -109,9 +109,8 @@ void main(void) {
 								break;
 						}
 						break;
-						break;
 					case FLOOR_NUM_3:
-						SPIputc(NUM1);
+						SPIputc(NUM3);
 						switch(rxBuffer[2])
 						{
 							case CALL_BTN_UP:
@@ -121,7 +120,6 @@ void main(void) {
 								CLR_BITS(PORTA,LEDF3DN);
 								break;
 						}
-						break;
 						break;
 				}
 			
