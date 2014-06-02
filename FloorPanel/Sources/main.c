@@ -6,7 +6,7 @@
 #include "canModule.h"
 
 #define BUTF3UP	0b10000000
-#define BUTF2DN	0b01000000
+#define BUTF3DN	0b01000000
 #define BUTF2UP	0b00100000
 #define BUTF2DN	0b00010000
 #define BUTF1UP	0b00000100
