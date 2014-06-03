@@ -13,24 +13,32 @@ Linker      : SmartLinker V-5.0.40 Build 10203, Jul 23 2010
 FILE SECTION
 ---------------------------------------------------------------------------------------------
 mc9s12c32.c.o                           Model: SMALL,         Lang: ANSI-C
+canModule.c.o                           Model: SMALL,         Lang: ANSI-C
 main.c.o                                Model: SMALL,         Lang: ANSI-C
-Start12.c.o                             Model: SMALL,         Lang: ANSI-C
-rtshc12.c.o (ansisi.lib)                Model: SMALL,         Lang: ANSI-C
 spi.c.o                                 Model: SMALL,         Lang: ANSI-C
 timer.c.o                               Model: SMALL,         Lang: ANSI-C
-canModule.c.o                           Model: SMALL,         Lang: ANSI-C
+Start12.c.o                             Model: SMALL,         Lang: ANSI-C
+rtshc12.c.o (ansisi.lib)                Model: SMALL,         Lang: ANSI-C
 
 *********************************************************************************************
 STARTUP SECTION
 ---------------------------------------------------------------------------------------------
-Entry point: 0xC000 (_Startup)
+Entry point: 0xC029 (_Startup)
+_startupData is allocated at 0xC031 and uses 6 Bytes
+extern struct _tagStartup {
+  unsigned nofZeroOut     1
+  _Range   pZeroOut       0x900     11
+  _Copy    *toCopyDownBeg 0xC2BC
+} _startupData;
 
 *********************************************************************************************
 SECTION-ALLOCATION SECTION
 Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
-.init                              6     R     0xC000     0xC005   ROM_C000
-.text                            613     R     0xC006     0xC26A   ROM_C000
+.init                             49     R     0xC000     0xC030   ROM_C000
+.startData                        10     R     0xC031     0xC03A   ROM_C000
+.text                            613     R     0xC03B     0xC29F   ROM_C000
+.copy                              2     R     0xC2BC     0xC2BD   ROM_C000
 .stack                           256   R/W      0x800      0x8FF   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
 .abs_section_9                     1   N/I        0x9        0x9   .absSeg1
@@ -253,15 +261,15 @@ Section Name                    Size  Type     From       To       Segment
 .abs_section_fc                    2   N/I       0xFC       0xFD   .absSeg218
 .abs_section_16e                   2   N/I      0x16E      0x16F   .absSeg219
 .abs_section_17e                   2   N/I      0x17E      0x17F   .absSeg220
-.abs_section_ffde                  2     R     0xFFDE     0xFFDF   .absSeg221
-.abs_section_ffb2                  2     R     0xFFB2     0xFFB3   .absSeg222
+.abs_section_ffb2                  2     R     0xFFB2     0xFFB3   .absSeg221
+.abs_section_ffde                  2     R     0xFFDE     0xFFDF   .absSeg222
 .bss                               2   R/W      0x900      0x901   RAM
-RUNTIME                           28     R     0xC26B     0xC286   ROM_C000
 .common                            9   R/W      0x902      0x90A   RAM
+RUNTIME                           28     R     0xC2A0     0xC2BB   ROM_C000
 .vectSeg223_vect                   2     R     0xFFFE     0xFFFF   .vectSeg223
 
 Summary of section sizes per section type:
-READ_ONLY (R):         28D (dec:      653)
+READ_ONLY (R):         2C4 (dec:      708)
 READ_WRITE (R/W):      10B (dec:      267)
 NO_INIT (N/I):         104 (dec:      260)
 
@@ -269,7 +277,7 @@ NO_INIT (N/I):         104 (dec:      260)
 VECTOR-ALLOCATION SECTION
     Address     InitValue   InitFunction
 ---------------------------------------------------------------------------------------------
-     0xFFFE        0xC000   _Startup
+     0xFFFE        0xC029   _Startup
 
 *********************************************************************************************
 OBJECT-ALLOCATION SECTION
@@ -499,66 +507,68 @@ MODULE:                 -- mc9s12c32.c.o --
      _PWMDTY45                                   FC       2       2       0   .abs_section_fc
      _CANRXTSR                                  16E       2       2       0   .abs_section_16e
      _CANTXTSR                                  17E       2       2       0   .abs_section_17e
-MODULE:                 -- main.c.o --
-- PROCEDURES:
-     main                                      C006     148     328       7   .text       
-- VARIABLES:
-MODULE:                 -- Start12.c.o --
-- PROCEDURES:
-     _Startup                                  C000       6       6       0   .init       
-- VARIABLES:
-- LABELS:
-     __SEG_END_SSTACK                           900       0       0       1               
-MODULE:                 -- rtshc12.c.o (ansisi.lib) --
-- PROCEDURES:
-     _COPY                                     C26B       8       8       1   RUNTIME     
-     _CASE_CHECKED_BYTE                        C273      14      20       1   RUNTIME     
-- VARIABLES:
-MODULE:                 -- spi.c.o --
-- PROCEDURES:
-     SPIinit                                   C14E       8       8       1   .text       
-     SPIputc                                   C156      11      17       2   .text       
-- VARIABLES:
-MODULE:                 -- timer.c.o --
-- PROCEDURES:
-     timer_init                                C167      11      17       1   .text       
-     TCNT_Overflow_ISR                         C178       A      10       1   .text       
-- VARIABLES:
-     timer_overflow_count                       900       2       2       3   .bss        
-     _Vector_16                                FFDE       2       2       0   .abs_section_ffde
 MODULE:                 -- canModule.c.o --
 - PROCEDURES:
-     initCan                                   C182      61      97       1   .text       
-     sendCanFrame                              C1E3      60      96       1   .text       
-     can_ISR                                   C243      28      40       1   .text       
+     initCan                                   C03B      61      97       1   .text       
+     sendCanFrame                              C09C      60      96       1   .text       
+     can_ISR                                   C0FC      28      40       1   .text       
 - VARIABLES:
      _Vector_38                                FFB2       2       2       0   .abs_section_ffb2
      canRXData                                  902       8       8       2   .common     
      canRXFlag                                  90A       1       1       3   .common     
+MODULE:                 -- main.c.o --
+- PROCEDURES:
+     main                                      C124     148     328       7   .text       
+- VARIABLES:
+MODULE:                 -- spi.c.o --
+- PROCEDURES:
+     SPIinit                                   C26C       8       8       1   .text       
+     SPIputc                                   C274      11      17       2   .text       
+- VARIABLES:
+MODULE:                 -- timer.c.o --
+- PROCEDURES:
+     timer_init                                C285      11      17       1   .text       
+     TCNT_Overflow_ISR                         C296       A      10       1   .text       
+- VARIABLES:
+     timer_overflow_count                       900       2       2       3   .bss        
+     _Vector_16                                FFDE       2       2       0   .abs_section_ffde
+MODULE:                 -- Start12.c.o --
+- PROCEDURES:
+     Init                                      C000      29      41       1   .init       
+     _Startup                                  C029       8       8       0   .init       
+- VARIABLES:
+     _startupData                              C031       6       6       3   .startData  
+- LABELS:
+     __SEG_END_SSTACK                           900       0       0       1               
+MODULE:                 -- rtshc12.c.o (ansisi.lib) --
+- PROCEDURES:
+     _COPY                                     C2A0       8       8       1   RUNTIME     
+     _CASE_CHECKED_BYTE                        C2A8      14      20       1   RUNTIME     
+- VARIABLES:
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   mc9s12c32.c.o                              260      0      0
+  canModule.c.o                                9    233      2
   main.c.o                                     0    328      0
-  Start12.c.o                                  0      6      0
-  rtshc12.c.o (ansisi.lib)                     0     28      0
   spi.c.o                                      0     25      0
   timer.c.o                                    2     27      2
-  canModule.c.o                                9    233      2
-  other                                      256      2      0
+  Start12.c.o                                  0     49      0
+  rtshc12.c.o (ansisi.lib)                     0     28      0
+  other                                      256     12      2
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  main SPIinit SPIputc timer_init TCNT_Overflow_ISR initCan sendCanFrame 
-  can_ISR 
+  initCan sendCanFrame can_ISR main SPIinit SPIputc timer_init 
+  TCNT_Overflow_ISR 
 SECTION: ".bss"
   timer_overflow_count 
 SECTION: ".init"
-  _Startup 
+  Init _Startup 
 SECTION: ".abs_section_8"
   _PORTE 
 SECTION: ".abs_section_9"
@@ -1001,14 +1011,14 @@ SECTION: ".abs_section_16e"
   _CANRXTSR 
 SECTION: ".abs_section_17e"
   _CANTXTSR 
-SECTION: "RUNTIME"
-  _COPY _CASE_CHECKED_BYTE 
+SECTION: ".abs_section_ffb2"
+  _Vector_38 
 SECTION: ".common"
   canRXData canRXFlag 
 SECTION: ".abs_section_ffde"
   _Vector_16 
-SECTION: ".abs_section_ffb2"
-  _Vector_38 
+SECTION: "RUNTIME"
+  _COPY _CASE_CHECKED_BYTE 
 
 *********************************************************************************************
 OBJECT LIST SORTED BY ADDRESS
@@ -1238,17 +1248,18 @@ OBJECT LIST SORTED BY ADDRESS
      timer_overflow_count                       900       2       2       3   .bss        
      canRXData                                  902       8       8       2   .common     
      canRXFlag                                  90A       1       1       3   .common     
-     _Startup                                  C000       6       6       0   .init       
-     main                                      C006     148     328       7   .text       
-     SPIinit                                   C14E       8       8       1   .text       
-     SPIputc                                   C156      11      17       2   .text       
-     timer_init                                C167      11      17       1   .text       
-     TCNT_Overflow_ISR                         C178       A      10       1   .text       
-     initCan                                   C182      61      97       1   .text       
-     sendCanFrame                              C1E3      60      96       1   .text       
-     can_ISR                                   C243      28      40       1   .text       
-     _COPY                                     C26B       8       8       1   RUNTIME     
-     _CASE_CHECKED_BYTE                        C273      14      20       1   RUNTIME     
+     Init                                      C000      29      41       1   .init       
+     _Startup                                  C029       8       8       0   .init       
+     initCan                                   C03B      61      97       1   .text       
+     sendCanFrame                              C09C      60      96       1   .text       
+     can_ISR                                   C0FC      28      40       1   .text       
+     main                                      C124     148     328       7   .text       
+     SPIinit                                   C26C       8       8       1   .text       
+     SPIputc                                   C274      11      17       2   .text       
+     timer_init                                C285      11      17       1   .text       
+     TCNT_Overflow_ISR                         C296       A      10       1   .text       
+     _COPY                                     C2A0       8       8       1   RUNTIME     
+     _CASE_CHECKED_BYTE                        C2A8      14      20       1   RUNTIME     
      _Vector_38                                FFB2       2       2       0   .abs_section_ffb2
      _Vector_16                                FFDE       2       2       0   .abs_section_ffde
 
@@ -1256,16 +1267,16 @@ OBJECT LIST SORTED BY ADDRESS
 UNUSED-OBJECTS SECTION
 ---------------------------------------------------------------------------------------------
 NOT USED PROCEDURES
+spi.c.o:
+  SPIcmd 
+timer.c.o:
+  get_overflow_count reset_overflow_count msleep 
 rtshc12.c.o (ansisi.lib):
   _BSHL _BSHRS _BSHRU _BDIVMODU _BDIVMODS _ISHL _ISHRU _ISHRS _LSHL _LSHRU 
   _LSHRS _LADD _LSUB _LAND _LOR _LXOR _LCMP _LCMP_P _LCMP_PP _LNEG _LCOM _LINC 
   _LDEC _LMUL _LMULU16x32 _LMULS16x32 _lDivMod _LDIVU _NEG_P _LDIVS _LMODU 
   _LMODS _ILSEXT _CASE_DIRECT _CASE_DIRECT_BYTE _CASE_CHECKED _CASE_SEARCH 
   _CASE_SEARCH_BYTE _CASE_SEARCH_8 _CASE_SEARCH_8_BYTE _FCALL _FPCMP 
-spi.c.o:
-  SPIcmd 
-timer.c.o:
-  get_overflow_count reset_overflow_count msleep 
 NOT USED VARIABLES
 rtshc12.c.o (ansisi.lib):
   _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
@@ -1273,18 +1284,15 @@ rtshc12.c.o (ansisi.lib):
 *********************************************************************************************
 COPYDOWN SECTION
 ---------------------------------------------------------------------------------------------
+------- ROM-ADDRESS: 0xC2BC ---- SIZE       2 ---
+Filling bytes inserted
+ 0000
 
 *********************************************************************************************
 OBJECT-DEPENDENCIES SECTION
 ---------------------------------------------------------------------------------------------
-_Startup                  USES __SEG_END_SSTACK main 
-main                      USES timer_init SPIinit initCan main _DDRAB SPIputc 
-                                canRXFlag canRXData _CASE_CHECKED_BYTE _PORTAB _COPY 
-                                sendCanFrame 
-SPIinit                   USES _SPICR1 _SPIBR 
-SPIputc                   USES _SPISR _SPIDR 
-timer_init                USES timer_overflow_count _TSCR2 _TSCR1 
-TCNT_Overflow_ISR         USES _TCNT timer_overflow_count 
+Init                      USES _startupData 
+_Startup                  USES __SEG_END_SSTACK Init main 
 initCan                   USES _CANCTL0 _CANCTL1 _CANBTR0 _CANBTR1 _CANIDAC 
                                 _CANIDAR0 _CANIDMR0 _CANIDAR1 _CANIDMR1 _CANIDAR2 
                                 _CANIDMR2 _CANIDAR3 _CANIDMR3 _CANIDAR4 _CANIDMR4 
@@ -1294,6 +1302,13 @@ sendCanFrame              USES _CANTFLG _CANTBSEL _CANTXIDR0 _CANTXIDR1
                                 _CANTXIDR2 _CANTXIDR3 _CANTXDSR0 _CANTXDLR _CANTXTBPR 
 can_ISR                   USES _CANRXDLR _CANRXDSR0 canRXData _CANRFLG 
                                 canRXFlag 
+main                      USES timer_init SPIinit initCan main _DDRAB SPIputc 
+                                canRXFlag canRXData _CASE_CHECKED_BYTE _PORTAB _COPY 
+                                sendCanFrame 
+SPIinit                   USES _SPICR1 _SPIBR 
+SPIputc                   USES _SPISR _SPIDR 
+timer_init                USES timer_overflow_count _TSCR2 _TSCR1 
+TCNT_Overflow_ISR         USES _TCNT timer_overflow_count 
 _Vector_38                USES can_ISR 
 _Vector_16                USES TCNT_Overflow_ISR 
 
@@ -1320,15 +1335,17 @@ DEPENDENCY TREE
  |       
  +- _Startup            
     | 
+    +- Init                
+    |    
     +- main                 (see above)
        
- _Vector_16          
- | 
- +- TCNT_Overflow_ISR   
-      
  _Vector_38          
  | 
  +- can_ISR             
+      
+ _Vector_16          
+ | 
+ +- TCNT_Overflow_ISR   
       
 *********************************************************************************************
 STATISTIC SECTION
@@ -1336,6 +1353,6 @@ STATISTIC SECTION
 
 ExeFile:
 --------
-Number of blocks to be downloaded: 6
-Total size of all blocks to be downloaded: 653
+Number of blocks to be downloaded: 7
+Total size of all blocks to be downloaded: 708
 
