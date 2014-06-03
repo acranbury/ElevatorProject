@@ -133,11 +133,11 @@ void main(void) {
     	
     	j = (j+1) %3;
     	txbuff[0] = ELEV_LOCATION;
-    	txbuff[1] = 1;                            
+    	txbuff[1] = j+1;                            
     	txbuff[2] = DIR_UP;
-    	message.id = FLOOR_1_ID | FLOOR_2_ID | FLOOR_3_ID;
-    	message.priority = 0x00;
-    	message.length = sizeof(txbuff)-1;
+    	message.id = BROADCAST_ID; //Broadcast
+    	message.priority = 0;
+    	message.length = 8;
     	message.payload = txbuff;	
 		sendCanFrame(message);       
 		
@@ -183,7 +183,7 @@ void main(void) {
 		        
 		        }
 		    } else if (canRXData[0] == ELEV_LOCATION){
-		        //LCDprintf("received elev. location");
+		        LCDprintf("floor %d dir %d", canRXData[1], canRXData[2]);
 		        
 		        
 		    } else if (canRXData[0] == ERROR_MSG){

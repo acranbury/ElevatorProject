@@ -16,25 +16,25 @@ void initCan (){
 	/* Acceptance Filters */
 	CANIDAC = 0x10;                     // Set four 16-bit Filters
 	
-	CANIDAR0 = 0x00;    //ACC_CODE_ID100_HIGH; 	//|\ 16-bit Filter 0
+	CANIDAR0 = 0xFF;    //ACC_CODE_ID100_HIGH; 	//|\ 16-bit Filter 0
 	CANIDMR0 = 0x00; 	//| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR1 = 0x00;    //ACC_CODE_ID100_LOW;		//| / with ID 0x100
+	CANIDAR1 = 0xFF;    //ACC_CODE_ID100_LOW;		//| / with ID 0x100
 	CANIDMR1 = 0x00; 	//|/
 	
-	CANIDAR2 = (ACC_CODE(FLOOR_1_ID) >> 8) & 0xFF;	//|\ 16-bit Filter 1
-	CANIDMR2 = (MASK_CODE(FLOOR_1_ID) >> 8) & 0xFF;	//| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR3 = ACC_CODE(FLOOR_1_ID) &0xFF;			//| / with ID 0x100
-	CANIDMR3 = MASK_CODE(FLOOR_1_ID) & 0xFF;		//|/
+    CANIDAR2 = (ACC_CODE(FLOOR_1_ID) >> 8) & 0xFF;	   	//|\ 16-bit Filter 1
+	CANIDMR2 = (MASK_CODE(FLOOR_1_ID) >> 8) & 0xFF;		//| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR3 = ACC_CODE(FLOOR_1_ID) &0xFF;				//| / with ID 0x100
+	CANIDMR3 = MASK_CODE(FLOOR_1_ID) & 0xFF;		    //|/
 	
-	CANIDAR4 = (ACC_CODE(FLOOR_2_ID) >> 8) & 0xFF;	 	//|\ 16-bit Filter 2
-	CANIDMR4 = (MASK_CODE(FLOOR_2_ID) >> 8) & 0xFF;	 	//| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR5 = ACC_CODE(FLOOR_2_ID) &0xFF;			 	//| / with ID 0x100
+	CANIDAR4 = (ACC_CODE(FLOOR_2_ID) >> 8) & 0xFF;	   	//|\ 16-bit Filter 2
+	CANIDMR4 = (MASK_CODE(FLOOR_2_ID) >> 8) & 0xFF;	    //| \__ Accepts Standard Data Frame CANMessage
+	CANIDAR5 = ACC_CODE(FLOOR_2_ID) &0xFF;			    //| / with ID 0x100
 	CANIDMR5 = MASK_CODE(FLOOR_2_ID) & 0xFF;		 	//|/
 	
-	CANIDAR6 = (ACC_CODE(FLOOR_3_ID) >> 8) & 0xFF;	 	//|\ 16-bit Filter 3
+	CANIDAR6 = (ACC_CODE(FLOOR_3_ID) >> 8) & 0xFF;	    //|\ 16-bit Filter 3
 	CANIDMR6 = (MASK_CODE(FLOOR_3_ID) >> 8) & 0xFF;	 	//| \__ Accepts Standard Data Frame CANMessage
-	CANIDAR7 = ACC_CODE(FLOOR_3_ID) &0xFF;			 	//| / with ID 0x100
-	CANIDMR7 = MASK_CODE(FLOOR_3_ID) & 0xFF;		 	//|/
+	CANIDAR7 = ACC_CODE(FLOOR_3_ID) &0xFF;				//| / with ID 0x100
+	CANIDMR7 = MASK_CODE(FLOOR_3_ID) & 0xFF;		 	//|/      
 	
 	CANCTL0 = 0x00;                   /* Exit Initialization Mode Request */
 	while ((CANCTL1 & 0x00) != 0) {}  /* Wait for Normal Mode */

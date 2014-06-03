@@ -35,6 +35,7 @@
 #define FLOOR_1_ID (0x00040000 << 5)
 #define FLOOR_2_ID (0x00080000 << 5)
 #define FLOOR_3_ID (0x00100000 << 5)
+#define BROADCAST_ID (0xFFE00000)
 
 //Messsage IDs
 #define ELEV_LOCATION 0x00

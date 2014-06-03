@@ -43,7 +43,7 @@ void main(void) {
 	unsigned char rxBuffer[CAN_MSG_LENGTH];
 	int i;
 	
-	txMessage.id = CONTROLLER_ID;
+	txMessage.id = BROADCAST_ID;
 	txMessage.priority = 0;
 	txMessage.length = CAN_MSG_LENGTH;
 	txMessage.payload = txBuffer;

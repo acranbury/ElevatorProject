@@ -4,6 +4,7 @@
 #include "derivative.h"      /* derivative-specific definitions */
 
 #define NO_ERR 1
+#define CAN_MSG_LENGTH 8
 
 #define MASK_CODE(id) ((~(id)) >> 16)       
 #define ACC_CODE(id) (((id)&0xFFFF0000) >> 16)
@@ -34,6 +35,7 @@
 #define FLOOR_1_ID (0x00040000 << 5)
 #define FLOOR_2_ID (0x00080000 << 5)
 #define FLOOR_3_ID (0x00100000 << 5)
+#define BROADCAST_ID (0xFFE00000)
 
 //Messsage IDs
 #define ELEV_LOCATION 0x00
@@ -41,6 +43,13 @@
 #define PANEL_BTN_PRESS 0x02
 #define APPEND_DISPLAY_CHAR 0x03
 #define ERROR_MSG 0xFF
+
+// Message Contents
+#define FLOOR_NUM_1	0x01
+#define FLOOR_NUM_2 0x02
+#define FLOOR_NUM_3 0x03
+#define CALL_BTN_UP 0x01
+#define CALL_BTN_DN 0x02
 
 typedef struct {
 	unsigned long id;
