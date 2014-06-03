@@ -1,0 +1,19 @@
+#exclude everything except for code and project files
+/CodeWarrior/*
+!/CodeWarrior/Sources
+/ElevatorCar/*
+!/ElevatorCar/Sources
+/FloorPanel/*
+!/FloorPanel/Sources
+
+# don’t ignore the project files
+!*.mcp
+
+# ignore all default code files
+datapage.c
+derivative.h
+Start12.c
+
+# ignore this weird Mac file…
+.DS_Store
+
