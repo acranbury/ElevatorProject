@@ -23,7 +23,7 @@
 #define DIR_DOWN 2
 #define DIR_STOPPED 3
 
-#define NUM_FLOORS 4
+#define NUM_FLOORS 3
 
 //Elevator panel buttons
 #define PANEL_FLOOR_1 0x01
@@ -43,12 +43,12 @@
 void main(void) {
     char i, j;
 	unsigned char txbuff[8] = "";
-	word distance;
+	word distance = 0;
 	CANMessage message = { 0x00, 0x00, 0x00, {0}};
 	unsigned char curFloor = 0;
 	unsigned char elevatorDirection = 0;
 	unsigned char callButtonsPressed[2][NUM_FLOORS] = { 0 };
-	unsigned char panelButtonsPressed[4] = { 0 };
+	unsigned char panelButtonsPressed[NUM_FLOORS] = { 0 };
 	unsigned char panicButton = 0;
 	unsigned char elevatorTarget = 0;
 	unsigned char targetFound = 0;
@@ -76,7 +76,7 @@ void main(void) {
 		
 		
 		//get elevator distance
-		//distance = usonic_getDistance();
+		distance = usonic_getDistance();
 		
 		//generalized for NUM_FLOORS, for a given floor offset to the ground floor, and distance between floors (left in big if statement in case
 		        //distance between floors is non-constant
@@ -85,7 +85,7 @@ void main(void) {
                 //LCDprintf("1st Floor!\n %d mm", distance);
                 curFloor = i+1;	
 		   }
-		}
+		}        
 		 
         /*if (distance < (ELEV_1ST + ELEV_THRESHOLD) && distance > (ELEV_1ST - ELEV_THRESHOLD)) {
             //LCDprintf("1st Floor!\n %d mm", distance);
@@ -99,7 +99,9 @@ void main(void) {
         } else if (distance < (ELEV_4TH + ELEV_THRESHOLD) && distance > (ELEV_4TH - ELEV_THRESHOLD)) {
     	    //LCDprintf("4th Floor!\n %d mm", distance);  
             curFloor = 4;
-    	} */
+    	} else {
+    	    //LCDprintf("Distance %d mm", distance);   
+    	}                   */
 		
     	if (elevatorTarget != curFloor) {
     	    if ((elevatorTarget - curFloor) > 0 ) { 
@@ -113,7 +115,7 @@ void main(void) {
       		
       		message.id = ELEVATOR_CAR_ID | FLOOR_1_ID | FLOOR_2_ID | FLOOR_3_ID;
       		message.priority = 0x00;
-      		message.length = sizeof(txbuff) - 1;
+      		message.length = 8;
       		message.payload = txbuff;
       		
     	} else {   //elevatorTarget = curFloor, which means elevator is stationary   	    
@@ -124,21 +126,21 @@ void main(void) {
     	    
     	    message.id = ELEVATOR_CAR_ID | FLOOR_1_ID | FLOOR_2_ID | FLOOR_3_ID;
     	    message.priority = 0x00;
-    	    message.length = sizeof(txbuff) - 1;
+    	    message.length = 8;
     	    message.payload = txbuff;
     	   
     	    panelButtonsPressed[curFloor-1] = 0; //clear the panel floor button as we have reached the destination floor
     	    targetFound = 0; //clear the target found flag to find a new target
     	}
     	
-    	j = (j+1) %3;
+    /*	j = (j+1) %3;
     	txbuff[0] = ELEV_LOCATION;
     	txbuff[1] = j+1;                            
     	txbuff[2] = DIR_UP;
     	message.id = BROADCAST_ID; //Broadcast
     	message.priority = 0;
     	message.length = 8;
-    	message.payload = txbuff;	
+    	message.payload = txbuff;*/	
 		sendCanFrame(message);       
 		
 		if ( canRXFlag )  //have received a message from one of the various floor buttons, receive message and enter it into the required motor output.
@@ -146,10 +148,10 @@ void main(void) {
 		    if (canRXData[0] == CALL_BTN_PRESS){
 		        if(canRXData[2] == UP_CALL_BTN){
 		            callButtonsPressed[UP_CALL_ROW][canRXData[1]-1] = 1;
-		            LCDprintf("FLOOR %d Up direction", canRXData[1]);
+		            //LCDprintf("FLOOR %d Up direction", canRXData[1]);
 		        }else {
 		            callButtonsPressed[DOWN_CALL_ROW][canRXData[1]-1] = 1;
-		            LCDprintf("FLOOR %d Down direction", canRXData[1]);
+		            //LCDprintf("FLOOR %d Down direction", canRXData[1]);
 		        }
 		        
 		    } else if (canRXData[0] == PANEL_BTN_PRESS){
@@ -196,6 +198,7 @@ void main(void) {
 	    
 	    //Logic to determine the current elevator target
 	    if (targetFound == 0) {
+	        elevatorTarget = curFloor; //set a back up target in case the target finding algorithm doesn't find any other targets
 	        
     	    if (elevatorDirection == DIR_UP){    //Elevator is currently moving up, handle any up requests above elevator before moving down
     	        for(i=curFloor-1; i< NUM_FLOORS; i++){
@@ -261,13 +264,13 @@ void main(void) {
     	        }
     	    }
 	    }
-		/*if(panicButton){
-		    LCDprintf("PANIC BUTTON SELECTED- ELEVATOR STALLED!");
+		if(panicButton){
+		    LCDprintf("EMERGENCY!");
 		} else if(targetFound){
-		    LCDprintf("Elevator target floor is %d!", elevatorTarget);
+		    LCDprintf("target floor: %d!", elevatorTarget);
 		} else {
-		    LCDprintf("Elevator is stationary, no buttons pressed.");
-		}            */ 
-		msleep(1000);
+		    LCDprintf("No target");
+		}             
+		msleep(100);
   } 
 }

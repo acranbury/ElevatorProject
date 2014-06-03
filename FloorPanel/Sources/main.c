@@ -54,6 +54,11 @@ void main(void) {
 	
 	initCan();
 	
+	while (!(CANCTL0 & 0x10));
+
+	CANRFLG = 0xC3;
+	CANRIER = 0x01;
+	
 	for(i = 0; i < 8; i++)
 	{
 		txBuffer[i] = 0;
