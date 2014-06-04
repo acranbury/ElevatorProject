@@ -36,18 +36,16 @@ void main(void) {
 
 	initCan();
 	
-	// ELEVATOR CAR CODE ONLY***************
-  initCarLoop();
-	// ELEVATOR CAR CODE ONLY***************  
-  
 	while (!(CANCTL0 & 0x10));
 
 	CANRFLG = 0xC3;
 	CANRIER = 0x01;
+	
+	// ELEVATOR CAR CODE ONLY***************
+  initCarLoop();
+	// ELEVATOR CAR CODE ONLY***************  
 
 	//LCDprintf("Hello World");
-
-	usonic_init();
 	
 	EnableInterrupts;
 	
