@@ -1,5 +1,5 @@
 *** EVALUATION ***
-PROGRAM "E:\Libraries\Documents\GitHub\ElevatorProject\CodeWarrior\bin\Project.abs"
+PROGRAM "C:\Users\acranbury-cc\Desktop\GitHub\ElevatorProject\CodeWarrior\bin\Project.abs"
 
 *********************************************************************************************
 TARGET SECTION
@@ -13,37 +13,29 @@ Linker      : SmartLinker V-5.0.40 Build 10203, Jul 23 2010
 FILE SECTION
 ---------------------------------------------------------------------------------------------
 mc9s12c32.c.o                           Model: SMALL,         Lang: ANSI-C
-canModule.c.o                           Model: SMALL,         Lang: ANSI-C
-lcd.c.o                                 Model: SMALL,         Lang: ANSI-C
 main.c.o                                Model: SMALL,         Lang: ANSI-C
-sci.c.o                                 Model: SMALL,         Lang: ANSI-C
-timer.c.o                               Model: SMALL,         Lang: ANSI-C
-usonic.c.o                              Model: SMALL,         Lang: ANSI-C
 Start12.c.o                             Model: SMALL,         Lang: ANSI-C
 PRINTF.C.o (ansisi.lib)                 Model: SMALL,         Lang: ANSI-C
 rtshc12.c.o (ansisi.lib)                Model: SMALL,         Lang: ANSI-C
+canModule.c.o                           Model: SMALL,         Lang: ANSI-C
+lcd.c.o                                 Model: SMALL,         Lang: ANSI-C
+sci.c.o                                 Model: SMALL,         Lang: ANSI-C
+timer.c.o                               Model: SMALL,         Lang: ANSI-C
+usonic.c.o                              Model: SMALL,         Lang: ANSI-C
 
 *********************************************************************************************
 STARTUP SECTION
 ---------------------------------------------------------------------------------------------
-Entry point: 0xC029 (_Startup)
-_startupData is allocated at 0xC031 and uses 6 Bytes
-extern struct _tagStartup {
-  unsigned nofZeroOut     1
-  _Range   pZeroOut       0x900     63
-  _Copy    *toCopyDownBeg 0xCC82
-} _startupData;
+Entry point: 0xC000 (_Startup)
 
 *********************************************************************************************
 SECTION-ALLOCATION SECTION
 Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
-.init                             49     R     0xC000     0xC030   ROM_C000
-.startData                        10     R     0xC031     0xC03A   ROM_C000
-.rodata                          116     R     0xC03B     0xC0AE   ROM_C000
-.rodata1                          58     R     0xC0AF     0xC0E8   ROM_C000
-.text                           2846     R     0xC0E9     0xCC06   ROM_C000
-.copy                              2     R     0xCC82     0xCC83   ROM_C000
+.init                              6     R     0xC000     0xC005   ROM_C000
+.rodata                          116     R     0xC006     0xC079   ROM_C000
+.rodata1                         126     R     0xC07A     0xC0F7   ROM_C000
+.text                           2633     R     0xC0F8     0xCB40   ROM_C000
 .stack                           256   R/W      0x800      0x8FF   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
 .abs_section_9                     1   N/I        0x9        0x9   .absSeg1
@@ -271,12 +263,12 @@ Section Name                    Size  Type     From       To       Segment
 .abs_section_ffde                  2     R     0xFFDE     0xFFDF   .absSeg223
 .abs_section_ffe6                  2     R     0xFFE6     0xFFE7   .absSeg224
 .bss                               9   R/W      0x900      0x908   RAM
+RUNTIME                          123     R     0xCB41     0xCBBB   ROM_C000
 .common                           54   R/W      0x909      0x93E   RAM
-RUNTIME                          123     R     0xCC07     0xCC81   ROM_C000
 .vectSeg225_vect                   2     R     0xFFFE     0xFFFF   .vectSeg225
 
 Summary of section sizes per section type:
-READ_ONLY (R):         C8E (dec:     3214)
+READ_ONLY (R):         BC6 (dec:     3014)
 READ_WRITE (R/W):      13F (dec:      319)
 NO_INIT (N/I):         104 (dec:      260)
 
@@ -284,7 +276,7 @@ NO_INIT (N/I):         104 (dec:      260)
 VECTOR-ALLOCATION SECTION
     Address     InitValue   InitFunction
 ---------------------------------------------------------------------------------------------
-     0xFFFE        0xC029   _Startup
+     0xFFFE        0xC000   _Startup
 
 *********************************************************************************************
 OBJECT-ALLOCATION SECTION
@@ -514,125 +506,129 @@ MODULE:                 -- mc9s12c32.c.o --
      _PWMDTY45                                   FC       2       2       0   .abs_section_fc
      _CANRXTSR                                  16E       2       2       0   .abs_section_16e
      _CANTXTSR                                  17E       2       2       0   .abs_section_17e
+MODULE:                 -- main.c.o --
+- PROCEDURES:
+     main                                      C0F8     21B     539       6   .text       
+- VARIABLES:
+     STRING.Call.FLOOR..d.Up.2                 C07A      11      17       1   .rodata1    
+     STRING.Call.FLOOR..d.Down.3               C08B      13      19       1   .rodata1    
+     STRING.Car.FLOOR..d.4                     C09E       D      13       1   .rodata1    
+     STRING.Car.FLOOR..d.5                     C0AB       D      13       1   .rodata1    
+     STRING.Car.FLOOR..d.6                     C0B8       D      13       1   .rodata1    
+     STRING.Door.Close.7                       C0C5       B      11       1   .rodata1    
+     STRING.Door.Open.8                        C0D0       A      10       1   .rodata1    
+     STRING.floor..d.dir..d.9                  C0DA      10      16       1   .rodata1    
+     STRING.EMERGENCY..10                      C0EA       B      11       1   .rodata1    
+MODULE:                 -- Start12.c.o --
+- PROCEDURES:
+     _Startup                                  C000       6       6       0   .init       
+- VARIABLES:
+- LABELS:
+     __SEG_END_SSTACK                           900       0       0       1               
+MODULE:                 -- PRINTF.C.o (ansisi.lib) --
+- PROCEDURES:
+     vprintf                                   C313     478    1144      49   .text       
+     _out                                      C78B       C      12       9   .text       
+     deposit_char                              C797       F      15       1   .text       
+     vsprintf                                  C7A6      29      41       1   .text       
+- VARIABLES:
+     pow10                                     C006      28      40       4   .rodata     
+     pow16                                     C02E      20      32       4   .rodata     
+     pow8                                      C04E      2C      44       4   .rodata     
+     pbuf                                       900       6       6      15   .bss        
+MODULE:                 -- rtshc12.c.o (ansisi.lib) --
+- PROCEDURES:
+     _LCMP_P                                   CB41      15      21       3   RUNTIME     
+     _LNEG                                     CB56       D      13       1   RUNTIME     
+     _ILSEXT                                   CB63       7       7       2   RUNTIME     
+     _COPY                                     CB6A       8       8       1   RUNTIME     
+     _CASE_DIRECT_BYTE                         CB72       5       5       2   RUNTIME     
+     _CASE_CHECKED_BYTE                        CB77      14      20       1   RUNTIME     
+     _CASE_SEARCH_8                            CB8B      17      23       1   RUNTIME     
+     _CASE_SEARCH_8_BYTE                       CBA2      1A      26       1   RUNTIME     
+- VARIABLES:
 MODULE:                 -- canModule.c.o --
 - PROCEDURES:
-     initCan                                   C0E9      5A      90       1   .text       
-     sendCanFrame                              C143      60      96       1   .text       
-     can_ISR                                   C1A3      28      40       1   .text       
+     initCan                                   C7CF      5A      90       1   .text       
+     sendCanFrame                              C829      60      96       1   .text       
+     can_ISR                                   C889      28      40       1   .text       
 - VARIABLES:
      _Vector_38                                FFB2       2       2       0   .abs_section_ffb2
-     canRXData                                  909       8       8       9   .common     
+     canRXData                                  909       8       8       8   .common     
      canRXFlag                                  911       1       1       3   .common     
 MODULE:                 -- lcd.c.o --
 - PROCEDURES:
-     LCDinit                                   C1CB      55      85       1   .text       
-     LCDclear                                  C220       B      11       3   .text       
-     LCDhome                                   C22B       B      11       1   .text       
-     LCDputc                                   C236      46      70       2   .text       
-     LCDputs                                   C27C       F      15       2   .text       
-     LCDprintf                                 C28B      1C      28       3   .text       
-     LCDaddress                                C2A7      30      48       2   .text       
-     LCDcmd                                    C2D7      39      57       8   .text       
-     LCDdata                                   C310      39      57       1   .text       
+     LCDinit                                   C8B1      55      85       1   .text       
+     LCDclear                                  C906       B      11       3   .text       
+     LCDhome                                   C911       B      11       1   .text       
+     LCDputc                                   C91C      46      70       2   .text       
+     LCDputs                                   C962       F      15       2   .text       
+     LCDprintf                                 C971      1C      28       5   .text       
+     LCDaddress                                C98D      30      48       2   .text       
+     LCDcmd                                    C9BD      39      57       8   .text       
+     LCDdata                                   C9F6      39      57       1   .text       
 - VARIABLES:
-     STRING....1                               C0AF       3       3       1   .rodata1    
-MODULE:                 -- main.c.o --
-- PROCEDURES:
-     main                                      C349     2F0     752      20   .text       
-- VARIABLES:
-     STRING.floor..d.dir..d.2                  C0B2      10      16       1   .rodata1    
-     STRING.EMERGENCY..3                       C0C2       B      11       1   .rodata1    
-     STRING.target.floor...d..4                C0CD      12      18       1   .rodata1    
-     STRING.No.target.5                        C0DF       A      10       1   .rodata1    
+     STRING....1                               C0F5       3       3       1   .rodata1    
 MODULE:                 -- sci.c.o --
 - PROCEDURES:
-     SCI_RX_ISR                                C639      48      72       1   .text       
+     SCI_RX_ISR                                CA2F      48      72       1   .text       
 - VARIABLES:
-     i.2                                        900       1       1       2   .bss        
+     i.2                                        906       1       1       2   .bss        
      _Vector_20                                FFD6       2       2       0   .abs_section_ffd6
      SCIbuf                                     912      28      40       1   .common     
      SCIcount                                   93A       1       1       2   .common     
 MODULE:                 -- timer.c.o --
 - PROCEDURES:
-     timer_init                                C681      11      17       1   .text       
-     msleep                                    C692      32      50       8   .text       
-     TCNT_Overflow_ISR                         C6C4       A      10       1   .text       
+     timer_init                                CA77      11      17       1   .text       
+     msleep                                    CA88      32      50       8   .text       
+     TCNT_Overflow_ISR                         CABA       A      10       1   .text       
 - VARIABLES:
-     timer_overflow_count                       901       2       2       3   .bss        
+     timer_overflow_count                       907       2       2       3   .bss        
      _Vector_16                                FFDE       2       2       0   .abs_section_ffde
 MODULE:                 -- usonic.c.o --
 - PROCEDURES:
-     usonic_init                               C6CE       7       7       1   .text       
-     usonic_getDistance                        C6D5      55      85       1   .text       
-     sonic_ISR                                 C72A      21      33       1   .text       
+     usonic_init                               CAC4       7       7       1   .text       
+     usonic_getDistance                        CACB      55      85       1   .text       
+     sonic_ISR                                 CB20      21      33       1   .text       
 - VARIABLES:
      _Vector_12                                FFE6       2       2       0   .abs_section_ffe6
      first_count                                93B       2       2       5   .common     
      second_count                               93D       2       2       4   .common     
-MODULE:                 -- Start12.c.o --
-- PROCEDURES:
-     Init                                      C000      29      41       1   .init       
-     _Startup                                  C029       8       8       0   .init       
-- VARIABLES:
-     _startupData                              C031       6       6       3   .startData  
-- LABELS:
-     __SEG_END_SSTACK                           900       0       0       1               
-MODULE:                 -- PRINTF.C.o (ansisi.lib) --
-- PROCEDURES:
-     vprintf                                   C74B     478    1144      49   .text       
-     _out                                      CBC3       C      12       9   .text       
-     deposit_char                              CBCF       F      15       1   .text       
-     vsprintf                                  CBDE      29      41       1   .text       
-- VARIABLES:
-     pow10                                     C03B      28      40       4   .rodata     
-     pow16                                     C063      20      32       4   .rodata     
-     pow8                                      C083      2C      44       4   .rodata     
-     pbuf                                       903       6       6      15   .bss        
-MODULE:                 -- rtshc12.c.o (ansisi.lib) --
-- PROCEDURES:
-     _LCMP_P                                   CC07      15      21       3   RUNTIME     
-     _LNEG                                     CC1C       D      13       1   RUNTIME     
-     _ILSEXT                                   CC29       7       7       2   RUNTIME     
-     _COPY                                     CC30       8       8       1   RUNTIME     
-     _CASE_DIRECT_BYTE                         CC38       5       5       2   RUNTIME     
-     _CASE_CHECKED_BYTE                        CC3D      14      20       1   RUNTIME     
-     _CASE_SEARCH_8                            CC51      17      23       1   RUNTIME     
-     _CASE_SEARCH_8_BYTE                       CC68      1A      26       1   RUNTIME     
-- VARIABLES:
 
 *********************************************************************************************
 MODULE STATISTIC
   Name                                      Data   Code  Const
 ---------------------------------------------------------------------------------------------
   mc9s12c32.c.o                              260      0      0
+  main.c.o                                     0    539    123
+  Start12.c.o                                  0      6      0
+  PRINTF.C.o (ansisi.lib)                      6   1212    116
+  rtshc12.c.o (ansisi.lib)                     0    123      0
   canModule.c.o                                9    226      2
   lcd.c.o                                      0    382      3
-  main.c.o                                     0    752     55
   sci.c.o                                     42     72      2
   timer.c.o                                    2     77      2
   usonic.c.o                                   4    125      2
-  Start12.c.o                                  0     49      0
-  PRINTF.C.o (ansisi.lib)                      6   1212    116
-  rtshc12.c.o (ansisi.lib)                     0    123      0
-  other                                      256     12      2
+  other                                      256      2      0
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  initCan sendCanFrame can_ISR LCDinit LCDclear LCDhome LCDputc LCDputs 
-  LCDprintf LCDaddress LCDcmd LCDdata main SCI_RX_ISR timer_init msleep 
-  TCNT_Overflow_ISR usonic_init usonic_getDistance sonic_ISR vprintf _out 
-  deposit_char vsprintf 
+  main vprintf _out deposit_char vsprintf initCan sendCanFrame can_ISR LCDinit 
+  LCDclear LCDhome LCDputc LCDputs LCDprintf LCDaddress LCDcmd LCDdata 
+  SCI_RX_ISR timer_init msleep TCNT_Overflow_ISR usonic_init usonic_getDistance 
+  sonic_ISR 
 SECTION: ".bss"
-  i.2 timer_overflow_count pbuf 
+  pbuf i.2 timer_overflow_count 
 SECTION: ".init"
-  Init _Startup 
+  _Startup 
 SECTION: ".rodata"
   pow10 pow16 pow8 
 SECTION: ".rodata1"
-  STRING....1 STRING.floor..d.dir..d.2 STRING.EMERGENCY..3 
-  STRING.target.floor...d..4 STRING.No.target.5 
+  STRING.Call.FLOOR..d.Up.2 STRING.Call.FLOOR..d.Down.3 STRING.Car.FLOOR..d.4 
+  STRING.Car.FLOOR..d.5 STRING.Car.FLOOR..d.6 STRING.Door.Close.7 
+  STRING.Door.Open.8 STRING.floor..d.dir..d.9 STRING.EMERGENCY..10 STRING....1 
 SECTION: ".abs_section_8"
   _PORTE 
 SECTION: ".abs_section_9"
@@ -1075,19 +1071,19 @@ SECTION: ".abs_section_16e"
   _CANRXTSR 
 SECTION: ".abs_section_17e"
   _CANTXTSR 
-SECTION: ".abs_section_ffb2"
-  _Vector_38 
+SECTION: "RUNTIME"
+  _LCMP_P _LNEG _ILSEXT _COPY _CASE_DIRECT_BYTE _CASE_CHECKED_BYTE 
+  _CASE_SEARCH_8 _CASE_SEARCH_8_BYTE 
 SECTION: ".common"
   canRXData canRXFlag SCIbuf SCIcount first_count second_count 
+SECTION: ".abs_section_ffb2"
+  _Vector_38 
 SECTION: ".abs_section_ffd6"
   _Vector_20 
 SECTION: ".abs_section_ffde"
   _Vector_16 
 SECTION: ".abs_section_ffe6"
   _Vector_12 
-SECTION: "RUNTIME"
-  _LCMP_P _LNEG _ILSEXT _COPY _CASE_DIRECT_BYTE _CASE_CHECKED_BYTE 
-  _CASE_SEARCH_8 _CASE_SEARCH_8_BYTE 
 
 *********************************************************************************************
 OBJECT LIST SORTED BY ADDRESS
@@ -1314,57 +1310,61 @@ OBJECT LIST SORTED BY ADDRESS
      _RDRAD                                     273       1       1       0   .abs_section_273
      _PERAD                                     274       1       1       0   .abs_section_274
      _PPSAD                                     275       1       1       0   .abs_section_275
-     i.2                                        900       1       1       2   .bss        
-     timer_overflow_count                       901       2       2       3   .bss        
-     pbuf                                       903       6       6      15   .bss        
-     canRXData                                  909       8       8       9   .common     
+     pbuf                                       900       6       6      15   .bss        
+     i.2                                        906       1       1       2   .bss        
+     timer_overflow_count                       907       2       2       3   .bss        
+     canRXData                                  909       8       8       8   .common     
      canRXFlag                                  911       1       1       3   .common     
      SCIbuf                                     912      28      40       1   .common     
      SCIcount                                   93A       1       1       2   .common     
      first_count                                93B       2       2       5   .common     
      second_count                               93D       2       2       4   .common     
-     Init                                      C000      29      41       1   .init       
-     _Startup                                  C029       8       8       0   .init       
-     pow10                                     C03B      28      40       4   .rodata     
-     pow16                                     C063      20      32       4   .rodata     
-     pow8                                      C083      2C      44       4   .rodata     
-     STRING....1                               C0AF       3       3       1   .rodata1    
-     STRING.floor..d.dir..d.2                  C0B2      10      16       1   .rodata1    
-     STRING.EMERGENCY..3                       C0C2       B      11       1   .rodata1    
-     STRING.target.floor...d..4                C0CD      12      18       1   .rodata1    
-     STRING.No.target.5                        C0DF       A      10       1   .rodata1    
-     initCan                                   C0E9      5A      90       1   .text       
-     sendCanFrame                              C143      60      96       1   .text       
-     can_ISR                                   C1A3      28      40       1   .text       
-     LCDinit                                   C1CB      55      85       1   .text       
-     LCDclear                                  C220       B      11       3   .text       
-     LCDhome                                   C22B       B      11       1   .text       
-     LCDputc                                   C236      46      70       2   .text       
-     LCDputs                                   C27C       F      15       2   .text       
-     LCDprintf                                 C28B      1C      28       3   .text       
-     LCDaddress                                C2A7      30      48       2   .text       
-     LCDcmd                                    C2D7      39      57       8   .text       
-     LCDdata                                   C310      39      57       1   .text       
-     main                                      C349     2F0     752      20   .text       
-     SCI_RX_ISR                                C639      48      72       1   .text       
-     timer_init                                C681      11      17       1   .text       
-     msleep                                    C692      32      50       8   .text       
-     TCNT_Overflow_ISR                         C6C4       A      10       1   .text       
-     usonic_init                               C6CE       7       7       1   .text       
-     usonic_getDistance                        C6D5      55      85       1   .text       
-     sonic_ISR                                 C72A      21      33       1   .text       
-     vprintf                                   C74B     478    1144      49   .text       
-     _out                                      CBC3       C      12       9   .text       
-     deposit_char                              CBCF       F      15       1   .text       
-     vsprintf                                  CBDE      29      41       1   .text       
-     _LCMP_P                                   CC07      15      21       3   RUNTIME     
-     _LNEG                                     CC1C       D      13       1   RUNTIME     
-     _ILSEXT                                   CC29       7       7       2   RUNTIME     
-     _COPY                                     CC30       8       8       1   RUNTIME     
-     _CASE_DIRECT_BYTE                         CC38       5       5       2   RUNTIME     
-     _CASE_CHECKED_BYTE                        CC3D      14      20       1   RUNTIME     
-     _CASE_SEARCH_8                            CC51      17      23       1   RUNTIME     
-     _CASE_SEARCH_8_BYTE                       CC68      1A      26       1   RUNTIME     
+     _Startup                                  C000       6       6       0   .init       
+     pow10                                     C006      28      40       4   .rodata     
+     pow16                                     C02E      20      32       4   .rodata     
+     pow8                                      C04E      2C      44       4   .rodata     
+     STRING.Call.FLOOR..d.Up.2                 C07A      11      17       1   .rodata1    
+     STRING.Call.FLOOR..d.Down.3               C08B      13      19       1   .rodata1    
+     STRING.Car.FLOOR..d.4                     C09E       D      13       1   .rodata1    
+     STRING.Car.FLOOR..d.5                     C0AB       D      13       1   .rodata1    
+     STRING.Car.FLOOR..d.6                     C0B8       D      13       1   .rodata1    
+     STRING.Door.Close.7                       C0C5       B      11       1   .rodata1    
+     STRING.Door.Open.8                        C0D0       A      10       1   .rodata1    
+     STRING.floor..d.dir..d.9                  C0DA      10      16       1   .rodata1    
+     STRING.EMERGENCY..10                      C0EA       B      11       1   .rodata1    
+     STRING....1                               C0F5       3       3       1   .rodata1    
+     main                                      C0F8     21B     539       6   .text       
+     vprintf                                   C313     478    1144      49   .text       
+     _out                                      C78B       C      12       9   .text       
+     deposit_char                              C797       F      15       1   .text       
+     vsprintf                                  C7A6      29      41       1   .text       
+     initCan                                   C7CF      5A      90       1   .text       
+     sendCanFrame                              C829      60      96       1   .text       
+     can_ISR                                   C889      28      40       1   .text       
+     LCDinit                                   C8B1      55      85       1   .text       
+     LCDclear                                  C906       B      11       3   .text       
+     LCDhome                                   C911       B      11       1   .text       
+     LCDputc                                   C91C      46      70       2   .text       
+     LCDputs                                   C962       F      15       2   .text       
+     LCDprintf                                 C971      1C      28       5   .text       
+     LCDaddress                                C98D      30      48       2   .text       
+     LCDcmd                                    C9BD      39      57       8   .text       
+     LCDdata                                   C9F6      39      57       1   .text       
+     SCI_RX_ISR                                CA2F      48      72       1   .text       
+     timer_init                                CA77      11      17       1   .text       
+     msleep                                    CA88      32      50       8   .text       
+     TCNT_Overflow_ISR                         CABA       A      10       1   .text       
+     usonic_init                               CAC4       7       7       1   .text       
+     usonic_getDistance                        CACB      55      85       1   .text       
+     sonic_ISR                                 CB20      21      33       1   .text       
+     _LCMP_P                                   CB41      15      21       3   RUNTIME     
+     _LNEG                                     CB56       D      13       1   RUNTIME     
+     _ILSEXT                                   CB63       7       7       2   RUNTIME     
+     _COPY                                     CB6A       8       8       1   RUNTIME     
+     _CASE_DIRECT_BYTE                         CB72       5       5       2   RUNTIME     
+     _CASE_CHECKED_BYTE                        CB77      14      20       1   RUNTIME     
+     _CASE_SEARCH_8                            CB8B      17      23       1   RUNTIME     
+     _CASE_SEARCH_8_BYTE                       CBA2      1A      26       1   RUNTIME     
      _Vector_38                                FFB2       2       2       0   .abs_section_ffb2
      _Vector_20                                FFD6       2       2       0   .abs_section_ffd6
      _Vector_16                                FFDE       2       2       0   .abs_section_ffde
@@ -1374,12 +1374,6 @@ OBJECT LIST SORTED BY ADDRESS
 UNUSED-OBJECTS SECTION
 ---------------------------------------------------------------------------------------------
 NOT USED PROCEDURES
-lcd.c.o:
-  LCDbksp LCDgetc LCDbusy LCDcgen 
-sci.c.o:
-  SCIinit SCIflush SCIdequeue SCIputc SCIputs SCIprintf SCIgetc SCIgets 
-timer.c.o:
-  get_overflow_count reset_overflow_count 
 PRINTF.C.o (ansisi.lib):
   set_printf sprintf 
 rtshc12.c.o (ansisi.lib):
@@ -1387,24 +1381,39 @@ rtshc12.c.o (ansisi.lib):
   _LSHRS _LADD _LSUB _LAND _LOR _LXOR _LCMP _LCMP_PP _LCOM _LINC _LDEC _LMUL 
   _LMULU16x32 _LMULS16x32 _lDivMod _LDIVU _NEG_P _LDIVS _LMODU _LMODS 
   _CASE_DIRECT _CASE_CHECKED _CASE_SEARCH _CASE_SEARCH_BYTE _FCALL _FPCMP 
-NOT USED VARIABLES
+lcd.c.o:
+  LCDbksp LCDgetc LCDbusy LCDcgen 
 sci.c.o:
-  i.1 
+  SCIinit SCIflush SCIdequeue SCIputc SCIputs SCIprintf SCIgetc SCIgets 
+timer.c.o:
+  get_overflow_count reset_overflow_count 
+NOT USED VARIABLES
 rtshc12.c.o (ansisi.lib):
   _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
+sci.c.o:
+  i.1 
 
 *********************************************************************************************
 COPYDOWN SECTION
 ---------------------------------------------------------------------------------------------
-------- ROM-ADDRESS: 0xCC82 ---- SIZE       2 ---
-Filling bytes inserted
- 0000
 
 *********************************************************************************************
 OBJECT-DEPENDENCIES SECTION
 ---------------------------------------------------------------------------------------------
-Init                      USES _startupData 
-_Startup                  USES __SEG_END_SSTACK Init main 
+_Startup                  USES __SEG_END_SSTACK main 
+main                      USES timer_init LCDinit initCan _CANCTL0 _CANRFLG 
+                                _CANRIER usonic_init LCDclear usonic_getDistance _COPY 
+                                sendCanFrame canRXFlag canRXData main 
+                                STRING.Call.FLOOR..d.Up.2 STRING.Call.FLOOR..d.Down.3 LCDprintf 
+                                _CASE_DIRECT_BYTE STRING.Car.FLOOR..d.4 STRING.Car.FLOOR..d.5 
+                                STRING.Car.FLOOR..d.6 STRING.Door.Close.7 STRING.Door.Open.8 
+                                STRING.floor..d.dir..d.9 STRING.EMERGENCY..10 msleep 
+vprintf                   USES vprintf _out _CASE_SEARCH_8_BYTE 
+                                _CASE_DIRECT_BYTE _CASE_SEARCH_8 pbuf _ILSEXT _LNEG pow8 _LCMP_P 
+                                pow16 pow10 
+_out                      USES pbuf 
+deposit_char              USES pbuf 
+vsprintf                  USES pbuf deposit_char vprintf 
 initCan                   USES _CANCTL0 _CANCTL1 _CANBTR0 _CANBTR1 _CANIDAC 
                                 _CANIDAR0 _CANIDMR0 _CANIDAR1 _CANIDMR1 _CANIDAR2 
                                 _CANIDMR2 _CANIDAR3 _CANIDMR3 _CANIDAR4 _CANIDMR4 
@@ -1424,11 +1433,6 @@ LCDprintf                 USES vsprintf LCDputs
 LCDaddress                USES _DDRAB _PORTAB 
 LCDcmd                    USES _PORTAB msleep 
 LCDdata                   USES _PORTAB msleep 
-main                      USES timer_init LCDinit initCan _CANCTL0 _CANRFLG 
-                                _CANRIER usonic_init LCDclear usonic_getDistance _COPY 
-                                sendCanFrame canRXFlag canRXData _CASE_DIRECT_BYTE 
-                                STRING.floor..d.dir..d.2 LCDprintf main STRING.EMERGENCY..3 
-                                STRING.target.floor...d..4 STRING.No.target.5 msleep 
 SCI_RX_ISR                USES _SCISR1 i.2 _SCIDRL SCIbuf SCIcount 
 timer_init                USES timer_overflow_count _TSCR2 _TSCR1 
 msleep                    USES _TSCR1 _TCNT _TC3 _TIOS _TFLG1 
@@ -1437,12 +1441,6 @@ usonic_init               USES _TIOS
 usonic_getDistance        USES first_count second_count _TIE _TCTL3 _TSCR1 
                                 _TCTL1 _CFORC _TCNT _TC5 _TFLG1 
 sonic_ISR                 USES first_count _TC4 _TCTL3 second_count _TIE 
-vprintf                   USES vprintf _out _CASE_SEARCH_8_BYTE 
-                                _CASE_DIRECT_BYTE _CASE_SEARCH_8 pbuf _ILSEXT _LNEG pow8 _LCMP_P 
-                                pow16 pow10 
-_out                      USES pbuf 
-deposit_char              USES pbuf 
-vsprintf                  USES pbuf deposit_char vprintf 
 _Vector_38                USES can_ISR 
 _Vector_20                USES SCI_RX_ISR 
 _Vector_16                USES TCNT_Overflow_ISR 
@@ -1483,8 +1481,6 @@ DEPENDENCY TREE
  |  |    
  |  +- sendCanFrame        
  |  |    
- |  +- _CASE_DIRECT_BYTE   
- |  |    
  |  +- LCDprintf           
  |  |  | 
  |  |  +- vsprintf            
@@ -1497,8 +1493,8 @@ DEPENDENCY TREE
  |  |  |     |    
  |  |  |     +- _CASE_SEARCH_8_BYTE 
  |  |  |     |    
- |  |  |     +- _CASE_DIRECT_BYTE    (see above)
- |  |  |     |  
+ |  |  |     +- _CASE_DIRECT_BYTE   
+ |  |  |     |    
  |  |  |     +- _CASE_SEARCH_8      
  |  |  |     |    
  |  |  |     +- _ILSEXT             
@@ -1531,12 +1527,12 @@ DEPENDENCY TREE
  |  |           | 
  |  |           +- msleep               (see above)
  |  |              
+ |  +- _CASE_DIRECT_BYTE    (see above)
+ |  |  
  |  +- msleep               (see above)
  |     
  +- _Startup            
     | 
-    +- Init                
-    |    
     +- main                 (see above)
        
  _Vector_38          
@@ -1561,6 +1557,6 @@ STATISTIC SECTION
 
 ExeFile:
 --------
-Number of blocks to be downloaded: 11
-Total size of all blocks to be downloaded: 3214
+Number of blocks to be downloaded: 9
+Total size of all blocks to be downloaded: 3014
 

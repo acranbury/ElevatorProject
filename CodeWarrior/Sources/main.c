@@ -8,22 +8,22 @@
 #include "spi.h"
 
 // Elevator Defines
-#define ELEV_THRESHOLD 5  // Threshold to have arrived at a floor, in mm.
+#define ELEV_THRESHOLD 5  	// Threshold to have arrived at a floor, in mm.
 
-#define FLOOR_DISTANCE 50  //Distance between floors
+#define FLOOR_DISTANCE 50  	//Distance between floors
 #define FLOOR_OFFSET 50     //Sensor reading at ground floor in mm
 
-#define ELEV_1ST 50       // Distance to be at the 1st floor, in mm.
-#define ELEV_2ND 100       // Distance to be at the 1st floor, in mm.
-#define ELEV_3RD 150       // Distance to be at the 1st floor, in mm.
-#define ELEV_4TH 200       // Distance to be at the 1st floor, in mm.
+#define ELEV_1ST 50       	// Distance to be at the 1st floor, in mm.
+#define ELEV_2ND 100       	// Distance to be at the 1st floor, in mm.
+#define ELEV_3RD 150       	// Distance to be at the 1st floor, in mm.
+#define ELEV_4TH 200       	// Distance to be at the 1st floor, in mm.
 
 //Elevator directions
 #define DIR_UP 1
 #define DIR_DOWN 2
 #define DIR_STOPPED 3
 
-#define NUM_FLOORS 3
+#define NUM_FLOORS 4
 
 //Elevator panel buttons
 #define PANEL_FLOOR_1 0x01
@@ -148,34 +148,41 @@ void main(void) {
 		    if (canRXData[0] == CALL_BTN_PRESS){
 		        if(canRXData[2] == UP_CALL_BTN){
 		            callButtonsPressed[UP_CALL_ROW][canRXData[1]-1] = 1;
-		            //LCDprintf("FLOOR %d Up direction", canRXData[1]);
+		            LCDprintf("Call FLOOR %d Up", canRXData[1]);
 		        }else {
 		            callButtonsPressed[DOWN_CALL_ROW][canRXData[1]-1] = 1;
-		            //LCDprintf("FLOOR %d Down direction", canRXData[1]);
+		            LCDprintf("Call FLOOR %d Down", canRXData[1]);
 		        }
 		        
 		    } else if (canRXData[0] == PANEL_BTN_PRESS){
 		        switch (canRXData[1]){
 		            case PANEL_FLOOR_1:{
 		                panelButtonsPressed[0] = 1;
+						LCDprintf("Car FLOOR %d", canRXData[1]);
 		                break;
 		            }
 		            case PANEL_FLOOR_2:{
 		                panelButtonsPressed[1] = 1;
+						LCDprintf("Car FLOOR %d", canRXData[1]);
 		                break;
 		            }
 		            case PANEL_FLOOR_3:{
 		                panelButtonsPressed[2] = 1;
+						LCDprintf("Car FLOOR %d", canRXData[1]);
 		                break;
 		            }
 		            case PANEL_FLOOR_4:{
 		                panelButtonsPressed[3] = 1;
 		                break;
 		            }
-		            case DOOR_CLOSE:
+		            case DOOR_CLOSE:{
+						LCDprintf("Door Close");
 		                break;
-		            case DOOR_OPEN:
+					}
+		            case DOOR_OPEN:{
+						LCDprintf("Door Open");
 		                break;
+					}
 		            case EMERG_STOP:{
 		                panicButton = 1;
 		                break;
@@ -195,7 +202,7 @@ void main(void) {
 		    //LCDprintf("Floor %d!\n %d mm", canRXData[0], distance);
 			canRXFlag = 0;
 		}
-	    
+	    /*
 	    //Logic to determine the current elevator target
 	    if (targetFound == 0) {
 	        elevatorTarget = curFloor; //set a back up target in case the target finding algorithm doesn't find any other targets
@@ -263,14 +270,14 @@ void main(void) {
     	           }
     	        }
     	    }
-	    }
+	    }*/
 		if(panicButton){
 		    LCDprintf("EMERGENCY!");
-		} else if(targetFound){
+		}/* else if(targetFound){
 		    LCDprintf("target floor: %d!", elevatorTarget);
 		} else {
 		    LCDprintf("No target");
-		}             
+		}  */           
 		msleep(100);
   } 
 }
