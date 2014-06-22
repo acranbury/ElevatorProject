@@ -25,6 +25,14 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+def TCP_Send_Message(message):
+    try:
+        # Send the message
+        s.sendall(message)
+    except socket.error:
+        # Send failed
+        print 'Send failed'
+    
 class Ui_Client(object):
     def setupUi(self, Client):
         Client.setObjectName(_fromUtf8("Client"))
@@ -183,13 +191,15 @@ class Ui_Client(object):
     def DoorCloseClicked(self):
         #print "Door Closed pressed!"
         self.DoorCloseLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
-        #### SEND DOOR CLOSE TO server  
+        #### SEND DOOR CLOSE TO server 
+        TCP_Send_Message(DOOR_CLOSE) 
     
     ## Door Open handler
     def DoorOpenClicked(self):        
         #print "Door Open pressed!"
         self.DoorOpenLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND DOOR OPEN TO server       
+        TCP_Send_Message(DOOR_OPEN)
     
     ## Emergency Stop handler
     def EStopClicked(self):        
@@ -211,60 +221,72 @@ class Ui_Client(object):
         self.floor2Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
         self.floor3Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
         #### SEND ESTOP TO server    
+        TCP_Send_Message(EMERG_STOP)
     
     ## Floor 1 (car) button handler    
     def floor1Clicked(self):
         #print "Floor 1 inside car pressed!" 
         self.floor1Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND floor 1 pressed (from car) to server
+        TCP_Send_Message(CAR_FLOOR_1)
+        
+
     
     ## Floor 2 (car) button handler    
     def floor2Clicked(self):
         #print "Floor 2 inside car pressed!" 
         self.floor2Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND floor 2 pressed (from car) to server
+        TCP_Send_Message(CAR_FLOOR_2)
     
     ## Floor 3 (car) button handler    
     def floor3Clicked(self):
         #print "Floor 3 inside car pressed!" 
         self.floor3Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND floor 3 pressed (from car) to server
+        TCP_Send_Message(CAR_FLOOR_3)
       
     ## Floor 1 (call up) button handler    
     def floor1UpClicked(self):
         #print "Floor 1 pressed up!" 
         self.floor1Up.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowUp_scaled.png")))
         #### SEND floor 1 has called up to server.
+        TCP_Send_Message(CALL_FLOOR_1_UP)
     
     ## Floor 2 (call up) button handler    
     def floor2UpClicked(self):
         #print "Floor 2 pressed up!" 
         self.floor2Up.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowUp_scaled.png")))
         #### SEND floor 2 has called up to server.
-    
+        TCP_Send_Message(CALL_FLOOR_2_UP)
+        
     ## Floor 3 (call up) button handler    
     def floor3UpClicked(self):
         #print "Floor 3 pressed up!" 
         self.floor3Up.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowUp_scaled.png")))
         #### SEND floor 3 has called up to server.
+        TCP_Send_Message(CALL_FLOOR_3_UP)
         
     ## Floor 1 (call down) button handler    
     def floor1DownClicked(self):
         #print "Floor 1 pressed down!" 
         self.floor1Down.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowDown_scaled.png")))
         #### SEND floor 1 has called down to server.
+        TCP_Send_Message(CALL_FLOOR_1_DOWN)
     
     ## Floor 2 (call down) button handler    
     def floor2DownClicked(self):
         #print "Floor 2 pressed down!" 
         self.floor2Down.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowDown_scaled.png")))
         #### SEND floor 2 has called down to server.
+        TCP_Send_Message(CALL_FLOOR_2_DOWN)
     
     ## Floor 3 (call down) button handler    
     def floor3DownClicked(self):
         #print "Floor 3 pressed down!" 
         self.floor3Down.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowDown_scaled.png")))
         #### SEND floor 3 has called down to server.
+        TCP_Send_Message(CALL_FLOOR_3_DOWN)
         
     def saveReport(self):
         #print "Save Report button pressed" 
@@ -277,10 +299,26 @@ class Ui_Client(object):
     def getReport(self):
         print "Get Report button pressed"
         #### SEND request to server for data.
+        TCP_Send_Message(GET_REPORT)
+        
+        # Now receive data
+        reply = s.recv(4096)
+        ##need to handle data received via TCP port
+        
+        #filter out diagnostic data (sensor reading, etc...)
+        print reply
         
     def getDiagnostic(self):
         print "Get Diagnostic Report button pressed"  
         #### SEND request to server for data. 
+        TCP_Send_Message(GET_REPORT)
+        
+        # Now receive data
+        reply = s.recv(4096)
+        
+        #simply print the report wherever needed
+    
+        print reply
     
     def retranslateUi(self, Client):
         Client.setWindowTitle(_translate("Client", "Remote Diagnostic Tool", None))
@@ -311,10 +349,42 @@ class Ui_Client(object):
 
 if __name__ == "__main__":
     import sys
+    import socket               # Import socket module
+    
+    #first we need to create a tcp connection to the server
+    try:
+        #create an AF_INET, STREAM socket (TCP)
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    except socket.error, msg:
+        print 'Failed to create socket. Error code: ' + str(msg[0]) + ' , Error message: ' + msg[1]
+        sys.exit()
+    
+    print 'Socket Created!'
+    
+    host = 'www.google.com'
+    port = 80
+    
+    try:
+        remote_ip = socket.gethostbyname( host )
+    
+    except socket.gaierror:
+        # could not resolve
+        print 'Hostname could not be resolved. Exiting'
+        sys.exit()
+    
+    print 'IP address of ' + host + ' is ' + remote_ip
+    
+    # Connect to remote server
+    s.connect((remote_ip, port))
+    
+    print 'Socket connected to ' + host + ' on ip ' + remote_ip
+
+    
     app = QtGui.QApplication(sys.argv)
     Client = QtGui.QMainWindow()
     ui = Ui_Client()
     ui.setupUi(Client)
+    
         
     ## Event Handlers connections
     Client.connect(ui.DoorCloseLbl, QtCore.SIGNAL('clicked()'), ui.DoorCloseClicked)
@@ -334,9 +404,8 @@ if __name__ == "__main__":
     Client.connect(ui.saveBtn, QtCore.SIGNAL('clicked()'), ui.saveReport)
         
     Client.show()
-    sys.exit(app.exec_())    
-    
-
+    sys.exit(app.exec_())  
+    s.close()  
 
 
 
