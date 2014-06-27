@@ -39,6 +39,42 @@ CALL_FLOOR_2_DOWN = '12'
 CALL_FLOOR_3_UP = '15'
 CALL_FLOOR_3_DOWN = '14'
 
+host = '142.156.193.184'
+port = 1520
+
+estop_active = False
+    
+def TCP_Connect():
+    
+    #s.close()
+    
+    #make a new socket after closing the previous one
+    try:
+        #create an AF_INET, STREAM socket (TCP)
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    except socket.error, msg:
+        print 'Failed to create socket. Error code: ' + str(msg[0]) + ' , Error message: ' + msg[1]
+        sys.exit()
+    
+    print 'Socket Created!'
+    
+    try:
+        remote_ip = socket.gethostbyname( str(ui.ip_editBx.text()))
+    
+    except socket.gaierror:
+        # could not resolve
+        print 'Hostname could not be resolved. Exiting'
+        sys.exit()
+    
+    print 'IP address of ' + str(ui.ip_editBx.text()) + ' is ' + remote_ip
+    
+    # Connect to remote server
+    s.connect((remote_ip, port))
+    s.settimeout(1)
+    
+    # Authenticate
+    TCP_Send_Message(str(ui.password_editBx.text()))
+
 def TCP_Send_Message(message):
     try:
         # Send the message
@@ -47,18 +83,56 @@ def TCP_Send_Message(message):
     except socket.error:
         # Send failed
         print 'Send failed'
+
+        
+def TCP_Get_Status():
+    try:
+        reply = s.recv(4096)
+    except socket.timeout:
+        print "Reply from server has timed out."
+    CurFloor = reply[0] 
+    
+    ####Nick/Alan, can you fill these out when you have the report sorted out?
+    DestFloor = 0 
+    Direction = 0 
+    ui.destFloorLbl.setText(str(DestFloor))
+    ui.directionLbl.setText(str(Direction))
+    ###########################################################################
+    
+    
+    if CurFloor == '1':
+        ui.curFloorLbl.setText('1')        
+        ui.floor1Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
+        ui.floor1Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
+        ui.floor1Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))    
+    elif CurFloor == '2': 
+        ui.curFloorLbl.setText('2')       
+        ui.floor2Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
+        ui.floor2Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
+        ui.floor2Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
+    elif CurFloor == '3': 
+        ui.curFloorLbl.setText('3')       
+        ui.floor3Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
+        ui.floor3Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
+        ui.floor3Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
+    else:        
+        ui.textEdit.append("\nInvalid floor status data received.")
+        
+    
+    
+    
     
 class Ui_Client(object):
     def setupUi(self, Client):
         Client.setObjectName(_fromUtf8("Client"))
-        Client.resize(547, 593)
+        Client.resize(547, 626)
         self.centralwidget = QtGui.QWidget(Client)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.reportGrpBx = QtGui.QGroupBox(self.centralwidget)
-        self.reportGrpBx.setGeometry(QtCore.QRect(10, 10, 311, 541))
+        self.reportGrpBx.setGeometry(QtCore.QRect(10, 10, 311, 571))
         self.reportGrpBx.setObjectName(_fromUtf8("reportGrpBx"))
         self.textEdit = QtGui.QTextEdit(self.reportGrpBx)
-        self.textEdit.setGeometry(QtCore.QRect(10, 60, 291, 471))
+        self.textEdit.setGeometry(QtCore.QRect(10, 60, 291, 501))
         self.textEdit.setObjectName(_fromUtf8("textEdit"))
         self.getReportBtn = QtGui.QPushButton(self.reportGrpBx)
         self.getReportBtn.setGeometry(QtCore.QRect(100, 30, 81, 23))
@@ -189,6 +263,18 @@ class Ui_Client(object):
         self.label_12 = QtGui.QLabel(self.groupBox_2)
         self.label_12.setGeometry(QtCore.QRect(80, 180, 51, 16))
         self.label_12.setObjectName(_fromUtf8("label_12"))
+        self.ip_btn = QtGui.QPushButton(self.centralwidget)
+        self.ip_btn.setGeometry(QtCore.QRect(330, 530, 75, 23))
+        self.ip_btn.setObjectName(_fromUtf8("ip_btn"))
+        self.ip_editBx = QtGui.QLineEdit(self.centralwidget)
+        self.ip_editBx.setGeometry(QtCore.QRect(410, 530, 101, 20))
+        self.ip_editBx.setObjectName(_fromUtf8("ip_editBx"))
+        self.password_btn = QtGui.QPushButton(self.centralwidget)
+        self.password_btn.setGeometry(QtCore.QRect(330, 560, 75, 23))
+        self.password_btn.setObjectName(_fromUtf8("password_btn"))
+        self.password_editBx = QtGui.QLineEdit(self.centralwidget)
+        self.password_editBx.setGeometry(QtCore.QRect(410, 560, 101, 20))
+        self.password_editBx.setObjectName(_fromUtf8("password_editBx"))
         Client.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(Client)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 547, 21))
@@ -207,7 +293,8 @@ class Ui_Client(object):
         #print "Door Closed pressed!"
         self.DoorCloseLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND DOOR CLOSE TO server 
-        TCP_Send_Message(DOOR_CLOSE) 
+        TCP_Send_Message(DOOR_CLOSE)
+        TCP_Get_Status() 
     
     ## Door Open handler
     def DoorOpenClicked(self):        
@@ -215,28 +302,37 @@ class Ui_Client(object):
         self.DoorOpenLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND DOOR OPEN TO server       
         TCP_Send_Message(DOOR_OPEN)
+        TCP_Get_Status() 
     
     ## Emergency Stop handler
-    def EStopClicked(self):        
+    def EStopClicked(self):  
+        global estop_active
         print "Emergency Stop pressed!" 
-        ## Set ESTOP bright
-        self.EStopLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
-        ## Then set all other buttons dark
-        self.DoorOpenLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
-        self.DoorCloseLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
-        self.floor1Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
-        self.floor2Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
-        self.floor3Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
-        
-        ## Set Up/Down buttons to dark as well.
-        self.floor1Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
-        self.floor2Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
-        self.floor3Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
-        self.floor1Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
-        self.floor2Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
-        self.floor3Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
-        #### SEND ESTOP TO server    
-        TCP_Send_Message(EMERG_STOP)
+        if estop_active == False:
+            estop_active = True
+            ## Set ESTOP bright
+            self.EStopLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
+            ## Then set all other buttons dark
+            self.DoorOpenLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
+            self.DoorCloseLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
+            self.floor1Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
+            self.floor2Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
+            self.floor3Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
+            
+            ## Set Up/Down buttons to dark as well.
+            self.floor1Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
+            self.floor2Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
+            self.floor3Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
+            self.floor1Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
+            self.floor2Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
+            self.floor3Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
+            #### SEND ESTOP TO server    
+            TCP_Send_Message(EMERG_STOP)
+            TCP_Get_Status() 
+        else:   
+            estop_active = False     
+            ## Set ESTOP dark
+            self.EStopLbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
     
     ## Floor 1 (car) button handler    
     def floor1Clicked(self):
@@ -244,6 +340,7 @@ class Ui_Client(object):
         self.floor1Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND floor 1 pressed (from car) to server
         TCP_Send_Message(CAR_FLOOR_1)
+        TCP_Get_Status() 
         
 
     
@@ -253,6 +350,7 @@ class Ui_Client(object):
         self.floor2Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND floor 2 pressed (from car) to server
         TCP_Send_Message(CAR_FLOOR_2)
+        TCP_Get_Status() 
     
     ## Floor 3 (car) button handler    
     def floor3Clicked(self):
@@ -260,6 +358,7 @@ class Ui_Client(object):
         self.floor3Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonLight.png")))
         #### SEND floor 3 pressed (from car) to server
         TCP_Send_Message(CAR_FLOOR_3)
+        TCP_Get_Status() 
       
     ## Floor 1 (call up) button handler    
     def floor1UpClicked(self):
@@ -267,6 +366,7 @@ class Ui_Client(object):
         self.floor1Up.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowUp_scaled.png")))
         #### SEND floor 1 has called up to server.
         TCP_Send_Message(CALL_FLOOR_1_UP)
+        TCP_Get_Status() 
     
     ## Floor 2 (call up) button handler    
     def floor2UpClicked(self):
@@ -274,6 +374,7 @@ class Ui_Client(object):
         self.floor2Up.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowUp_scaled.png")))
         #### SEND floor 2 has called up to server.
         TCP_Send_Message(CALL_FLOOR_2_UP)
+        TCP_Get_Status() 
         
     ## Floor 3 (call up) button handler    
     def floor3UpClicked(self):
@@ -281,6 +382,7 @@ class Ui_Client(object):
         self.floor3Up.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowUp_scaled.png")))
         #### SEND floor 3 has called up to server.
         TCP_Send_Message(CALL_FLOOR_3_UP)
+        TCP_Get_Status() 
         
     ## Floor 1 (call down) button handler    
     def floor1DownClicked(self):
@@ -288,6 +390,7 @@ class Ui_Client(object):
         self.floor1Down.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowDown_scaled.png")))
         #### SEND floor 1 has called down to server.
         TCP_Send_Message(CALL_FLOOR_1_DOWN)
+        TCP_Get_Status() 
     
     ## Floor 2 (call down) button handler    
     def floor2DownClicked(self):
@@ -295,6 +398,7 @@ class Ui_Client(object):
         self.floor2Down.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowDown_scaled.png")))
         #### SEND floor 2 has called down to server.
         TCP_Send_Message(CALL_FLOOR_2_DOWN)
+        TCP_Get_Status() 
     
     ## Floor 3 (call down) button handler    
     def floor3DownClicked(self):
@@ -302,6 +406,7 @@ class Ui_Client(object):
         self.floor3Down.setPixmap(QtGui.QPixmap(_fromUtf8("lightArrowDown_scaled.png")))
         #### SEND floor 3 has called down to server.
         TCP_Send_Message(CALL_FLOOR_3_DOWN)
+        TCP_Get_Status() 
         
     def saveReport(self):
         #print "Save Report button pressed" 
@@ -343,7 +448,6 @@ class Ui_Client(object):
         
         #simply print the report wherever needed
     
-        #print reply
     
     def retranslateUi(self, Client):
         Client.setWindowTitle(_translate("Client", "Remote Diagnostic Tool", None))
@@ -370,12 +474,17 @@ class Ui_Client(object):
         self.label_10.setText(_translate("Client", "Door Close", None))
         self.label_11.setText(_translate("Client", "E-Stop", None))
         self.label_12.setText(_translate("Client", "Door Open", None))
+        self.ip_btn.setText(_translate("Client", "Set IP", None))
+        self.ip_editBx.setText(_translate("Client", "142.156.193.184", None))
+        self.password_btn.setText(_translate("Client", "Set Password", None))
+        self.password_editBx.setText(_translate("Client", "ESEsem6", None))
 
 
 if __name__ == "__main__":
     import sys
     import socket               # Import socket module
     
+       
     #first we need to create a tcp connection to the server
     try:
         #create an AF_INET, STREAM socket (TCP)
@@ -385,10 +494,7 @@ if __name__ == "__main__":
         sys.exit()
     
     print 'Socket Created!'
-    
-    host = 'www.google.com'
-    port = 80
-    
+        
     try:
         remote_ip = socket.gethostbyname( host )
     
@@ -404,6 +510,9 @@ if __name__ == "__main__":
     s.settimeout(1)
     
     print 'Socket connected to ' + host + ' on ip ' + remote_ip
+    
+    # Authenticate
+    TCP_Send_Message('wrong password')
 
     
     app = QtGui.QApplication(sys.argv)
@@ -428,6 +537,8 @@ if __name__ == "__main__":
     Client.connect(ui.getDiagnosticBtn, QtCore.SIGNAL('clicked()'), ui.getDiagnostic)
     Client.connect(ui.getReportBtn, QtCore.SIGNAL('clicked()'), ui.getReport)
     Client.connect(ui.saveBtn, QtCore.SIGNAL('clicked()'), ui.saveReport)
+    Client.connect(ui.ip_btn, QtCore.SIGNAL('clicked()'), TCP_Connect)
+    Client.connect(ui.password_btn, QtCore.SIGNAL('clicked()'), TCP_Connect)
         
     Client.show()
     sys.exit(app.exec_())  
