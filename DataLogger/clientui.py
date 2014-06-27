@@ -25,9 +25,24 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+GET_REPORT = '0'
+CAR_FLOOR_1 = '20'
+CAR_FLOOR_2 = '21'
+CAR_FLOOR_3 = '22'
+DOOR_OPEN = '23'
+DOOR_CLOSE = '24'
+EMERG_STOP = '25'
+CALL_FLOOR_1_UP = '11'
+CALL_FLOOR_1_DOWN = '10'
+CALL_FLOOR_2_UP = '13'
+CALL_FLOOR_2_DOWN = '12'
+CALL_FLOOR_3_UP = '15'
+CALL_FLOOR_3_DOWN = '14'
+
 def TCP_Send_Message(message):
     try:
         # Send the message
+        print 'sending tcp message ' + message
         s.sendall(message)
     except socket.error:
         # Send failed
@@ -302,11 +317,16 @@ class Ui_Client(object):
         TCP_Send_Message(GET_REPORT)
         
         # Now receive data
-        reply = s.recv(4096)
+        try:
+            reply = s.recv(4096)
+        except socket.timeout:
+            print "Reply from server has timed out."
         ##need to handle data received via TCP port
-        
+        ui.textEdit.clear()
+        ui.textEdit.insertPlainText(reply)
+
         #filter out diagnostic data (sensor reading, etc...)
-        print reply
+        #print reply
         
     def getDiagnostic(self):
         print "Get Diagnostic Report button pressed"  
@@ -314,11 +334,16 @@ class Ui_Client(object):
         TCP_Send_Message(GET_REPORT)
         
         # Now receive data
-        reply = s.recv(4096)
+        try:
+            reply = s.recv(4096)
+        except socket.timeout:
+            print "Reply from server has timed out."
+        ui.textEdit.clear()
+        ui.textEdit.insertPlainText(reply)
         
         #simply print the report wherever needed
     
-        print reply
+        #print reply
     
     def retranslateUi(self, Client):
         Client.setWindowTitle(_translate("Client", "Remote Diagnostic Tool", None))
@@ -376,6 +401,7 @@ if __name__ == "__main__":
     
     # Connect to remote server
     s.connect((remote_ip, port))
+    s.settimeout(1)
     
     print 'Socket connected to ' + host + ' on ip ' + remote_ip
 
