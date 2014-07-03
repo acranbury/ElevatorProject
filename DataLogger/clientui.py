@@ -25,7 +25,8 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-GET_REPORT = '0'
+GET_DETAILED_REPORT = '00'
+GET_SIMPLE_REPORT = '01'
 CAR_FLOOR_1 = '20'
 CAR_FLOOR_2 = '21'
 CAR_FLOOR_3 = '22'
@@ -419,24 +420,21 @@ class Ui_Client(object):
     def getReport(self):
         print "Get Report button pressed"
         #### SEND request to server for data.
-        TCP_Send_Message(GET_REPORT)
+        TCP_Send_Message(GET_SIMPLE_REPORT)
         
         # Now receive data
         try:
             reply = s.recv(4096)
         except socket.timeout:
             print "Reply from server has timed out."
-        ##need to handle data received via TCP port
+        
         ui.textEdit.clear()
         ui.textEdit.insertPlainText(reply)
-
-        #filter out diagnostic data (sensor reading, etc...)
-        #print reply
         
     def getDiagnostic(self):
         print "Get Diagnostic Report button pressed"  
         #### SEND request to server for data. 
-        TCP_Send_Message(GET_REPORT)
+        TCP_Send_Message(GET_DETAILED_REPORT)
         
         # Now receive data
         try:
