@@ -105,17 +105,20 @@ def TCP_Get_Status():
         ui.curFloorLbl.setText('1')        
         ui.floor1Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
         ui.floor1Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
-        ui.floor1Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))    
+        ui.floor1Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
+        ui.textEdit.clear()
     elif CurFloor == '2': 
         ui.curFloorLbl.setText('2')       
         ui.floor2Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
         ui.floor2Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
         ui.floor2Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
+        ui.textEdit.clear()
     elif CurFloor == '3': 
         ui.curFloorLbl.setText('3')       
         ui.floor3Lbl.setPixmap(QtGui.QPixmap(_fromUtf8("buttonDark.png")))
         ui.floor3Up.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowUp_scaled.png")))
         ui.floor3Down.setPixmap(QtGui.QPixmap(_fromUtf8("darkArrowDown_scaled.png")))
+        ui.textEdit.clear()
     else:        
         ui.textEdit.append("\nInvalid floor status data received.")
         
@@ -510,7 +513,7 @@ if __name__ == "__main__":
     print 'Socket connected to ' + host + ' on ip ' + remote_ip
     
     # Authenticate
-    TCP_Send_Message('wrong password')
+    #TCP_Send_Message('ESEsem6')
 
     
     app = QtGui.QApplication(sys.argv)
