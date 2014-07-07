@@ -1,0 +1,25 @@
+[25.201]Current Floor: 1
+[25.201]Direction: Up
+[25.201]Destination: 3
+[25.201]Call Buttons: 2, 3
+[25.201]Car Buttons:
+[32.168]Current Floor: 2
+[32.168]Direction: Up
+[32.168]Destination: 3
+[32.168]Call Buttons: 3
+[32.168]Car Buttons: 3
+[38.586]Current Floor: 3
+[38.586]Direction: Down
+[38.586]Destination: 1
+[38.586]Call Buttons:
+[38.586]Car Buttons: 1
+[50.236]Current Floor: 2
+[50.236]Direction: Down
+[50.236]Destination: 1
+[50.236]Call Buttons:
+[50.236]Car Buttons: 1
+[60.896]Current Floor: 1
+[60.896]Direction: Down
+[60.896]Destination: 1
+[60.896]Call Buttons:
+[60.896]Car Buttons:

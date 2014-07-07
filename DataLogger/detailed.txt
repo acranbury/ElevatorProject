@@ -1,0 +1,42 @@
+[25.201]Current Floor: 1
+[25.201]Direction: Up
+[25.201]Destination: 3
+[25.201]Call Buttons: 2, 3
+[25.201]Car Buttons:
+[25.201]Sensor Distance: 10 cm
+[27.000]Sensor distance: 12 cm
+[29.000]Sensor Distance: 15 cm
+[30.000]Sensor Distance: 18 cm
+[32.168]Current Floor: 2
+[32.168]Direction: Up
+[32.168]Destination: 3
+[32.168]Call Buttons: 3
+[32.168]Car Buttons: 3
+[32.168]Sensor Distance: 20 cm
+[34.000]Sensor Distance: 22 cm
+[36.000]Sensor distance: 25 cm
+[38.000]Sensor Distance: 28 cm
+[38.586]Current Floor: 3
+[38.586]Direction: Down
+[38.586]Destination: 1
+[38.586]Call Buttons:
+[38.586]Car Buttons: 1
+[38.586]Sensor Distance: 30 cm
+[42.000]Sensor Distance: 28 cm
+[46.000]Sensor distance: 25 cm
+[48.000]Sensor Distance: 22 cm
+[50.236]Current Floor: 2
+[50.236]Direction: Down
+[50.236]Destination: 1
+[50.236]Call Buttons:
+[50.236]Car Buttons: 1
+[50.236]Sensor Distance: 20 cm
+[52.000]Sensor Distance: 18 cm
+[54.000]Sensor distance: 15 cm
+[58.000]Sensor Distance: 12 cm
+[60.896]Current Floor: 1
+[60.896]Direction: Down
+[60.896]Destination: 1
+[60.896]Call Buttons:
+[60.896]Car Buttons:
+[60.896]Sensor Distance: 10 cm
